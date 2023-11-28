@@ -3,7 +3,7 @@ param(
      [string]$GitHubDestinationPAT,
  
      [Parameter()]
-     [string]$AzureDevOpsPAT,
+     [string]$AzureDevOpsPAT
  )
 
 # Write your PowerShell commands here.
