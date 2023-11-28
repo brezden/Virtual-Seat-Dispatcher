@@ -6,26 +6,22 @@ param(
      [string]$AzureDevOpsPAT
  )
 
-# Write your PowerShell commands here.
 Write-Host ' - - - - - - - - - - - - - - - - - - - - - - - - -'
-Write-Host ' reflect Azure Devops repo changes to GitHub repo'
+Write-Host ' Azure Devops changes to GitHub repo'
 Write-Host ' - - - - - - - - - - - - - - - - - - - - - - - - - '
 $AzureRepoName = "Virtual-Seat-Dispatcher"
 $ADOCloneURL = "dev.azure.com/VSD-Sandbox/Virtual-Seat-Dispatcher/_git/Virtual-Seat-Dispatcher"
 $GitHubCloneURL = "github.com/brezden/Virtual-Seat-Dispatcher.git"
 $stageDir = pwd | Split-Path
-Write-Host "stage Dir is : $stageDir"
+Write-Host "Stage Dir: $stageDir"
 $githubDir = $stageDir +"\"+"gitHub"
-Write-Host "github Dir : $githubDir"
+Write-Host "Github Dir: $githubDir"
 $destination = $githubDir+"\"+ $AzureRepoName+".git"
-Write-Host "destination: $destination"
-#Please make sure, you remove https from azure-repo-clone-url
+Write-Host "Destination: $destination"
 $sourceURL = "https://$($AzureDevOpsPAT)"+"@"+"$($ADOCloneURL)"
-write-host "source URL : $sourceURL"
-#Please make sure, you remove https from github-repo-clone-url
+write-host "Source URL : $sourceURL"
 $destURL = "https://" + $($GitHubDestinationPAT) +"@"+"$($GitHubCloneURL)"
-write-host "dest URL : $destURL"
-#Check if the parent directory exists and delete
+write-host "Destination URL : $destURL"
 if((Test-Path -path $githubDir))
 {
   Remove-Item -Path $githubDir -Recurse -force
@@ -41,16 +37,15 @@ else
   Write-Host "The given folder path $githubDir already exists";
 }
 Set-Location $destination
-Write-Output '*****Git removing remote secondary****'
+Write-Output '*****git removing remote secondary****'
 git remote rm secondary
-Write-Output '*****Git remote add****'
+Write-Output '*****git remote add****'
 git remote add --mirror=fetch secondary $destURL
-Write-Output '*****Git fetch origin****'
+Write-Output '*****git fetch origin****'
 git fetch $sourceURL
-Write-Output '*****Git push secondary****'
-#git remote set-url origin $destURLSetURL
+Write-Output '*****git Push****'
 git push secondary  --all -f
-Write-Output '**Azure Devops repo synced with Github repo**'
+Write-Output '**Azure Devops Repo synced with Github Repo**'
 Set-Location $stageDir
 if((Test-Path -path $githubDir))
 {
