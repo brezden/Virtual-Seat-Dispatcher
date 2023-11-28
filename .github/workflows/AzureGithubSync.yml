@@ -10,4 +10,4 @@ jobs:
       - name: Check out repo        
         uses: actions/checkout@v2
       - run: |
-          ./AzureGithubSync.ps1 -GithubDestinationPAT ${{ secrets.GITHUBPAT }} -AzureDevOpsPAT ${{ secrets.AZUREPAT }} 
+          ./AzureGithubSync.ps1 -GithubDestinationPAT ${{ secrets.AZUREDEVOPSPAT }} -AzureDevOpsPAT ${{ secrets.GITHUBDESTINATIONPAT }} 
