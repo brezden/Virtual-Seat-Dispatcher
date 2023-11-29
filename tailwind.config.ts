@@ -9,6 +9,11 @@ export default {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
     },
+    colors: {
+      'primary': '#e2e8f0',
+      'highlight': '#0ea5e9',
+      'background' : '#082f49'
+    },
   },
   plugins: [],
 } satisfies Config;
