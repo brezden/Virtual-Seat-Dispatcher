@@ -1,3 +1,5 @@
+import SignInButton  from 'src/app/_components/buttons/sign-in';
+
 export default async function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-background to-[#15162c] text-white">
@@ -5,6 +7,7 @@ export default async function Home() {
         <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem] text-primary">
           Virtual Seat Dispatcher
         </h1>
+        <SignInButton />
       </div>
     </main>
   );
