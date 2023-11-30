@@ -1,5 +1,5 @@
 import { type Config } from "tailwindcss";
-import { fontFamily } from "tailwindcss/defaultTheme";
+import { fontFamily, colors as defaultColors } from "tailwindcss/defaultTheme";
 
 export default {
   content: ["./src/**/*.tsx"],
@@ -8,11 +8,13 @@ export default {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
-    },
-    colors: {
-      'primary': '#e2e8f0',
-      'highlight': '#0ea5e9',
-      'background' : '#082f49'
+      colors: {
+        primary: '#e2e8f0',
+        highlight: '#0ea5e9',
+        highlight_hover: '#0284c7',
+        background: '#082f49',
+        ...defaultColors
+      },
     },
   },
   plugins: [],
