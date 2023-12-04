@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import type { NextAuthOptions } from "next-auth";
 import AzureADProvider from "next-auth/providers/azure-ad";
 import { createUser } from "@utils/queries/user";
+// import other necessary modules
 
 export const options: NextAuthOptions = {
   providers: [
@@ -14,7 +14,6 @@ export const options: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user }) {
-      // Ensure that email, name, and image are strings
       if (
         typeof user.email === "string" &&
         typeof user.name === "string" &&
@@ -24,5 +23,9 @@ export const options: NextAuthOptions = {
       }
       return true;
     },
+  },
+  pages: {
+    signIn: "/auth/signin",
+    signOut: "/auth/signout",
   },
 };
