@@ -1,9 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import { put } from "@vercel/blob";
+import { convertBase64ToBlob } from "../convertImage";
 
 const prisma = new PrismaClient();
 
-export async function createUser(email: string, name: string, picture: Buffer) {
+export async function createUser(email: string, name: string, picture: string) {
   // Check if a user already exists
   const existingUser = await prisma.user.findUnique({
     where: {
@@ -11,25 +12,20 @@ export async function createUser(email: string, name: string, picture: Buffer) {
     },
   });
 
-  console.log("Existing user:", existingUser);
   // If user exists, return the existing user
   if (existingUser !== null) {
     return existingUser;
   }
 
-  // Convert the base64 string to a Blob
-  // const pictureBlob = convertBase64ToBlob(picture); // Make sure this function returns a Blob
-  // console.log("Picture blob:", pictureBlob);
+  const pictureBlob = await convertBase64ToBlob(picture);
 
   // Upload the blob to Vercel Blob Storage
-  const uploadedBlob = await put(`${email}-profile-picture.png`, picture, {
+  const uploadedBlob = await put(`${email}-profile-picture.png`, pictureBlob, {
     access: "public",
   });
 
   // // Use the URL from the uploaded blob
   const pictureUrl = uploadedBlob.url;
-
-  console.log("Uploaded blob:", uploadedBlob.url);
 
   // Create a new user with the URL of the uploaded image
   const newUser = await prisma.user.create({
@@ -41,14 +37,4 @@ export async function createUser(email: string, name: string, picture: Buffer) {
   });
 
   return newUser;
-}
-
-export async function getUserPicture(email: string) {
-  const user = await prisma.user.findUnique({
-    where: {
-      email: email,
-    },
-  });
-
-  return user?.picture;
 }

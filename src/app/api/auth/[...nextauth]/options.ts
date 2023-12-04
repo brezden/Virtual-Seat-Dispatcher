@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import type { NextAuthOptions } from "next-auth";
 import AzureADProvider from "next-auth/providers/azure-ad";
 import { createUser } from "@utils/queries/user";
-import { convertBase64ToBlob } from "~/app/utils/convertImage";
+// import other necessary modules
 
 export const options: NextAuthOptions = {
   providers: [
@@ -20,10 +19,13 @@ export const options: NextAuthOptions = {
         typeof user.name === "string" &&
         typeof user.image === "string"
       ) {
-        const blob = await convertBase64ToBlob(user.image);
-        await createUser(user.email, user.name, blob);
+        await createUser(user.email, user.name, user.image);
       }
       return true;
     },
+  },
+  pages: {
+    signIn: "/auth/signin",
+    signOut: "/auth/signout",
   },
 };
