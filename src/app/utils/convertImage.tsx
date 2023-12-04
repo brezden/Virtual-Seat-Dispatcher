@@ -1,4 +1,13 @@
-export async function convertBase64ToBlobURL(base64Image: string) {
-    const blob = await (await fetch(base64Image)).blob();
-    return URL.createObjectURL(blob);
+export async function convertBase64ToBlob(base64: string): Promise<Buffer> {
+  const dataPart = base64.split(",")[1];
+  if (!dataPart) {
+    throw new Error("Invalid base64 data");
+  }
+  try {
+    const buffer = Buffer.from(dataPart, "base64");
+    return buffer;
+  } catch (error) {
+    console.error("Error in convertBase64ToBlob:", error);
+    throw error;
+  }
 }
