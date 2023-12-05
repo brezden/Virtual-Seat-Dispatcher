@@ -1,11 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-
 export default function DashboardButton() {
-  const router = useRouter();
   function handleDashboardClick() {
-    router.push("/dashboard");
+    window.location.href = "/dashboard";
   }
 
   return (

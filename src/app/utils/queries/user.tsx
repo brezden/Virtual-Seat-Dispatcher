@@ -1,10 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 import { put } from "@vercel/blob";
-import { convertBase64ToBlob } from "../convertImage";
 
 const prisma = new PrismaClient();
 
-export async function createUser(email: string, name: string, picture: string) {
+export async function createUser(
+  email: string,
+  name: string,
+  accessToken: string,
+) {
   // Check if a user already exists
   const existingUser = await prisma.user.findUnique({
     where: {
@@ -17,15 +20,37 @@ export async function createUser(email: string, name: string, picture: string) {
     return existingUser;
   }
 
-  const pictureBlob = await convertBase64ToBlob(picture);
+  let pictureUrl = "";
 
-  // Upload the blob to Vercel Blob Storage
-  const uploadedBlob = await put(`${email}-profile-picture.png`, pictureBlob, {
-    access: "public",
-  });
+  try {
+    const response = await fetch(
+      "https://graph.microsoft.com/v1.0/me/photo/$value",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
 
-  // // Use the URL from the uploaded blob
-  const pictureUrl = uploadedBlob.url;
+    if (response.ok) {
+      const imageBuffer = await response.arrayBuffer();
+      const base64Image = Buffer.from(imageBuffer).toString("base64");
+
+      // Upload the blob to Vercel Blob Storage
+      const uploadedBlob = await put(
+        `${email}-profile-picture.png`,
+        base64Image,
+        {
+          access: "public",
+        },
+      );
+
+      // Use the URL from the uploaded blob
+      pictureUrl = uploadedBlob.url;
+    }
+  } catch (error) {
+    console.error("Error fetching profile picture:", error);
+  }
 
   // Create a new user with the URL of the uploaded image
   const newUser = await prisma.user.create({
@@ -36,5 +61,5 @@ export async function createUser(email: string, name: string, picture: string) {
     },
   });
 
-  return newUser;
+  return { newUser, pictureUrl };
 }

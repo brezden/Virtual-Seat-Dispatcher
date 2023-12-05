@@ -1,7 +1,6 @@
 import type { NextAuthOptions } from "next-auth";
 import AzureADProvider from "next-auth/providers/azure-ad";
 import { createUser } from "@utils/queries/user";
-// import other necessary modules
 
 export const options: NextAuthOptions = {
   providers: [
@@ -9,23 +8,18 @@ export const options: NextAuthOptions = {
       clientId: process.env.AZURE_AD_CLIENT_ID!,
       clientSecret: process.env.AZURE_AD_CLIENT_SECRET!,
       tenantId: process.env.AZURE_AD_TENANT_ID,
-      profilePhotoSize: 240,
     }),
   ],
   callbacks: {
-    async signIn({ user }) {
+    async signIn({ user, account }) {
       if (
         typeof user.email === "string" &&
         typeof user.name === "string" &&
-        typeof user.image === "string"
+        typeof account?.access_token === "string"
       ) {
-        await createUser(user.email, user.name, user.image);
+        await createUser(user.email, user.name, account.access_token);
       }
       return true;
     },
-  },
-  pages: {
-    signIn: "/auth/signin",
-    signOut: "/auth/signout",
   },
 };
