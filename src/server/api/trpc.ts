@@ -27,6 +27,7 @@ import { db } from "~/server/db";
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const session = await getServerAuthSession();
 
   return {
