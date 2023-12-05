@@ -3,6 +3,7 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useSession } from "next-auth/react";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", current: true },
@@ -14,11 +15,15 @@ function classNames(...classes: string[]) {
 }
 
 export default function NavigationBar() {
+  const { data: session } = useSession();
+  const name = session?.user?.name ?? "Default Name";
+  const email = session?.user?.email ?? "default@email.com";
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
         <>
-          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+          <div className="mx-auto px-6 sm:px-6 lg:px-12">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
@@ -57,9 +62,24 @@ export default function NavigationBar() {
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative ml-3">
                   <div>
-                    <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                    <Menu.Button className="relative flex items-center justify-end rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
+                      <div className="mr-2 flex flex-col pr-1.5 text-right">
+                        <p className="text-lg"> {name} </p>
+                        <p className="hidden text-sm opacity-40 sm:block">
+                          {email}
+                        </p>
+                      </div>
+                      <span className="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100 sm:h-10 sm:w-10">
+                        <svg
+                          className="h-full w-full text-gray-300"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                      </span>
                     </Menu.Button>
                   </div>
                   <Transition
