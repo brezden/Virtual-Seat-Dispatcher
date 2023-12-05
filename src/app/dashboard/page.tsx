@@ -1,6 +1,6 @@
 import NavigationBar from "../_components/navigation/navigationBar";
 
-export default function Dashboard() {
+export default async function Dashboard() {
   return (
     <div>
       <NavigationBar />
