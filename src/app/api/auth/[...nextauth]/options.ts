@@ -17,9 +17,31 @@ export const authOptions: NextAuthOptions = {
         typeof user.name === "string" &&
         typeof account?.access_token === "string"
       ) {
-        await createUser(user.email, user.name, account.access_token);
+        const userLogin = await createUser(
+          user.email,
+          user.name,
+          account.access_token,
+        );
+        const pictureUrl = getPictureUrl(userLogin);
+        user.image = pictureUrl;
       }
       return true;
     },
   },
 };
+function getPictureUrl(
+  userLogin:
+    | true
+    | {
+        id: number;
+        email: string;
+        name: string | null;
+        picture: string | null;
+      },
+): string | null {
+  if (typeof userLogin === "object" && userLogin !== null) {
+    return userLogin.picture;
+  } else {
+    return null;
+  }
+}

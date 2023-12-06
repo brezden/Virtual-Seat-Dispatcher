@@ -34,14 +34,20 @@ export async function createUser(
 
     if (response.ok) {
       const imageBuffer = await response.arrayBuffer();
+
+      // Convert the ArrayBuffer to a Base64 string
       const base64Image = Buffer.from(imageBuffer).toString("base64");
+
+      // Convert Base64 string to a Blob
+      const blob = base64ToBlob(base64Image, "image/jpeg");
 
       // Upload the blob to Vercel Blob Storage
       const uploadedBlob = await put(
-        `${email}-profile-picture.png`,
-        base64Image,
+        `${email}-profile-picture.jpeg`, // Ensure the file extension is .jpeg
+        blob,
         {
           access: "public",
+          contentType: "image/jpeg", // Set the correct MIME type
         },
       );
 
@@ -61,5 +67,15 @@ export async function createUser(
     },
   });
 
-  return { newUser, pictureUrl };
+  return newUser;
+}
+
+function base64ToBlob(base64: string, contentType: string): Blob {
+  const byteCharacters = atob(base64);
+  const byteNumbers = new Array(byteCharacters.length);
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+  const byteArray = new Uint8Array(byteNumbers);
+  return new Blob([byteArray], { type: contentType });
 }
