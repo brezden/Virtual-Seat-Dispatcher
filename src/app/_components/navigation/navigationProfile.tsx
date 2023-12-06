@@ -6,7 +6,7 @@ export default async function DashboardProfile() {
   const name = session?.user?.name ?? "Default Name";
   const email = session?.user?.email ?? "";
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row pt-0.5">
       <div className="mr-2 flex flex-col pr-1.5 text-right">
         <p className="text-lg"> {name} </p>
         <p className="hidden text-sm opacity-40 sm:block">{email}</p>

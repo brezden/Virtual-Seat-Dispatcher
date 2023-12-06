@@ -6,7 +6,6 @@ import {
 } from "next-auth";
 import AzureADProvider from "next-auth/providers/azure-ad";
 
-import { env } from "~/env";
 import { db } from "~/server/db";
 
 /**
