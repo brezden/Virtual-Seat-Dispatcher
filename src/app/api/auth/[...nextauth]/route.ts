@@ -1,9 +1,7 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
-import { options } from "./options";
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import NextAuth from "next-auth";
+import { authOptions } from "./options";
 
-const handler = NextAuth(options) as NextAuthOptions;
+const handler = NextAuth(authOptions);
 
-// Named exports for each HTTP method (GET and POST)
-export default handler;
-export { handler as GET };
-export { handler as POST };
+export { handler as GET, handler as POST };

@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "~/app/api/auth/[...nextauth]";
+import { authOptions } from "~/app/api/auth/[...nextauth]/options";
 
 export default async function DashboardProfile() {
   const session = await getServerSession(authOptions);
