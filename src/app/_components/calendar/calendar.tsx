@@ -1,0 +1,42 @@
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
+import DayBoxes from "./day-boxes";
+
+export default function Calendar() {
+  return (
+    <div>
+      <div className="lg:grid lg:grid-cols-12 lg:gap-x-16">
+        <div className="mt-10 text-center lg:col-start-8 lg:col-end-13 lg:row-start-1 lg:mt-9 xl:col-start-9">
+          <div className="flex items-center text-gray-900">
+            <button
+              type="button"
+              className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+            >
+              <span className="sr-only">Previous month</span>
+              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+            <div className="flex-auto text-sm font-semibold text-white">
+              December 2023
+            </div>
+            <button
+              type="button"
+              className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+            >
+              <span className="sr-only">Next month</span>
+              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+          </div>
+          <div className="mt-6 grid grid-cols-7 text-xs leading-6 text-gray-500">
+            <div>M</div>
+            <div>T</div>
+            <div>W</div>
+            <div>T</div>
+            <div>F</div>
+            <div>S</div>
+            <div>S</div>
+          </div>
+          <DayBoxes />
+        </div>
+      </div>
+    </div>
+  );
+}
