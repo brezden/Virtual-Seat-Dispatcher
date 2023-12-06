@@ -1,6 +1,5 @@
 "use client";
 
-import exp from "constants";
 import React, { useState } from "react";
 
 const days = [
@@ -41,6 +40,9 @@ const days = [
   { date: "2023-12-31", isCurrentMonth: true },
 ];
 
+const currentDate = getCurrentDateInEST();
+const currentDateString = formatDate(currentDate);
+
 interface Day {
   date: string;
   isCurrentMonth?: boolean;
@@ -49,17 +51,12 @@ interface Day {
 }
 
 export default function DayBoxes() {
-  const currentDate = getCurrentDateInEST();
-  const currentDateString = formatDate(currentDate);
-
   const [selectedDate, setSelectedDate] = useState<string | null>(
     currentDateString,
   );
 
   const handleDayClick = (date: string) => {
-    console.log(date);
     const selectedDay = createDate(date);
-    console.log(selectedDay, currentDate);
     if (selectedDay && selectedDay >= currentDate) {
       setSelectedDate(date);
     }

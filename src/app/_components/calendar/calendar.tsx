@@ -1,11 +1,15 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import DayBoxes from "./day-boxes";
+import BookedMembers from "./booked-members";
 
 export default function Calendar() {
   return (
     <div>
-      <div className="lg:grid lg:grid-cols-12 lg:gap-x-16">
-        <div className="mt-10 text-center lg:col-start-8 lg:col-end-13 lg:row-start-1 lg:mt-9 xl:col-start-9">
+      <div className="mt-10 lg:grid lg:grid-cols-12 lg:gap-x-16">
+        <div className="lg:col-span-full xl:col-start-1 xl:col-end-9">
+          <BookedMembers />
+        </div>
+        <div className="text-center lg:col-start-8 lg:col-end-13 lg:row-start-1 xl:col-start-9">
           <div className="flex items-center text-gray-900">
             <button
               type="button"
