@@ -1,4 +1,8 @@
+"use client";
+
 import { CalendarIcon, MapPinIcon } from "@heroicons/react/20/solid";
+import { calendarStore } from "~/app/store/calendarStore";
+import { formatDateString } from "~/app/utils/calendar/dates";
 const meetings = [
   {
     id: 2,
@@ -33,10 +37,14 @@ const meetings = [
 ];
 
 export default function BookedMembers() {
+  const currentSelectedDate = calendarStore(
+    (state) => state.currentSelectedDate,
+  );
+
   return (
     <div>
       <h2 className="text-white-900 text-lg font-medium leading-6">
-        Booked Members
+        {formatDateString(currentSelectedDate)}
       </h2>
       <ol className="divide-ytext-sm mt-4 leading-6 lg:col-span-7 xl:col-span-8">
         {meetings.map((meeting) => (
