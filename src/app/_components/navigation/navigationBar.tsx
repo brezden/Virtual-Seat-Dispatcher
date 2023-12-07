@@ -1,13 +1,10 @@
 import DashboardProfile from "./navigationProfile";
+import { classNames } from "../../utils/classNames";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", current: true },
   { name: "Book", href: "/book", current: false },
 ];
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export default function NavigationBar() {
   return (
@@ -15,7 +12,7 @@ export default function NavigationBar() {
       <div className="mx-auto px-6 sm:px-6 lg:px-12">
         <div className="relative flex h-16 items-center justify-between">
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-            <div className="hidden sm:ml-6 sm:block">
+            <div className="sm:ml-6">
               <div className="flex space-x-4">
                 {navigation.map((item) => (
                   <a
