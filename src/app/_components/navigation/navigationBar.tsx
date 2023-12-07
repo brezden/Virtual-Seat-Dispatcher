@@ -1,13 +1,10 @@
 import DashboardProfile from "./navigationProfile";
+import { classNames } from "../../utils/classNames";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", current: true },
   { name: "Book", href: "/book", current: false },
 ];
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export default function NavigationBar() {
   return (

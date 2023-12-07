@@ -1,3 +1,5 @@
+import type { Day } from "~/app/types/calendar";
+
 export function getCurrentDateInEST() {
   const now = new Date();
   const utc = now.getTime() + now.getTimezoneOffset() * 60000; // Convert local time to UTC
@@ -15,7 +17,6 @@ export function formatDate(date: Date): string {
 }
 
 export function generateCalendarDays(inputMonth: string): Day[] {
-  console.log("inputMonth", inputMonth);
   const parts = inputMonth.split("-");
   if (parts.length !== 2) {
     throw new Error("Invalid input format. Expected format: YYYY-MM");
