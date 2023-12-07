@@ -1,54 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
+import type { Day } from "../../types/calendar";
+import {
+  formatDate,
+  generateCalendarDays,
+  getCurrentDateInEST,
+} from "../../utils/calendar/dates";
 
-const days = [
-  { date: "2023-11-27", isExpired: true },
-  { date: "2023-11-28", isExpired: true },
-  { date: "2023-11-29", isExpired: true },
-  { date: "2023-11-30", isExpired: true },
-  { date: "2023-12-01", isCurrentMonth: true, isExpired: true },
-  { date: "2023-12-02", isCurrentMonth: true, isExpired: true },
-  { date: "2023-12-03", isCurrentMonth: true, isExpired: true },
-  { date: "2023-12-04", isCurrentMonth: true, isExpired: true },
-  { date: "2023-12-05", isCurrentMonth: true, isExpired: true },
-  { date: "2023-12-06", isCurrentMonth: true, isExpired: true },
-  { date: "2023-12-07", isCurrentMonth: true, isToday: true },
-  { date: "2023-12-08", isCurrentMonth: true },
-  { date: "2023-12-09", isCurrentMonth: true },
-  { date: "2023-12-10", isCurrentMonth: true },
-  { date: "2023-12-11", isCurrentMonth: true },
-  { date: "2023-12-12", isCurrentMonth: true },
-  { date: "2023-12-13", isCurrentMonth: true },
-  { date: "2023-12-14", isCurrentMonth: true },
-  { date: "2023-12-15", isCurrentMonth: true },
-  { date: "2023-12-16", isCurrentMonth: true },
-  { date: "2023-12-17", isCurrentMonth: true },
-  { date: "2023-12-18", isCurrentMonth: true },
-  { date: "2023-12-19", isCurrentMonth: true },
-  { date: "2023-12-20", isCurrentMonth: true },
-  { date: "2023-12-21", isCurrentMonth: true },
-  { date: "2023-12-22", isCurrentMonth: true },
-  { date: "2023-12-23", isCurrentMonth: true },
-  { date: "2023-12-24", isCurrentMonth: true },
-  { date: "2023-12-25", isCurrentMonth: true },
-  { date: "2023-12-26", isCurrentMonth: true },
-  { date: "2023-12-27", isCurrentMonth: true },
-  { date: "2023-12-28", isCurrentMonth: true },
-  { date: "2023-12-29", isCurrentMonth: true },
-  { date: "2023-12-30", isCurrentMonth: true },
-  { date: "2023-12-31", isCurrentMonth: true },
-];
-
+const days = generateCalendarDays("2024-02");
 const currentDate = getCurrentDateInEST();
 const currentDateString = formatDate(currentDate);
-
-interface Day {
-  date: string;
-  isCurrentMonth?: boolean;
-  isToday?: boolean;
-  isExpired?: boolean;
-}
 
 export default function DayBoxes() {
   const [selectedDate, setSelectedDate] = useState<string | null>(
@@ -124,20 +86,4 @@ export default function DayBoxes() {
 
 function classNames(...classes: (string | false | undefined | null)[]): string {
   return classes.filter(Boolean).join(" ");
-}
-
-function getCurrentDateInEST() {
-  const now = new Date();
-  const utc = now.getTime() + now.getTimezoneOffset() * 60000; // Convert local time to UTC
-  const estOffset = 5 * 60 * 60000; // EST is UTC-5 hours
-  const estTime = new Date(utc - estOffset);
-  estTime.setHours(0, 0, 0, 0);
-  return estTime;
-}
-
-function formatDate(date: Date): string {
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const day = date.getDate().toString().padStart(2, "0");
-  return `${year}-${month}-${day}`;
 }
