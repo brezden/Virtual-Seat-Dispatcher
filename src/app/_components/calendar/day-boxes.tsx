@@ -3,17 +3,17 @@
 import React, { useState } from "react";
 
 const days = [
-  { date: "2023-11-27" },
-  { date: "2023-11-28" },
-  { date: "2023-11-29" },
-  { date: "2023-11-30" },
-  { date: "2023-12-01", isCurrentMonth: true },
-  { date: "2023-12-02", isCurrentMonth: true },
-  { date: "2023-12-03", isCurrentMonth: true },
-  { date: "2023-12-04", isCurrentMonth: true },
-  { date: "2023-12-05", isCurrentMonth: true },
-  { date: "2023-12-06", isCurrentMonth: true },
-  { date: "2023-12-07", isCurrentMonth: true },
+  { date: "2023-11-27", isExpired: true },
+  { date: "2023-11-28", isExpired: true },
+  { date: "2023-11-29", isExpired: true },
+  { date: "2023-11-30", isExpired: true },
+  { date: "2023-12-01", isCurrentMonth: true, isExpired: true },
+  { date: "2023-12-02", isCurrentMonth: true, isExpired: true },
+  { date: "2023-12-03", isCurrentMonth: true, isExpired: true },
+  { date: "2023-12-04", isCurrentMonth: true, isExpired: true },
+  { date: "2023-12-05", isCurrentMonth: true, isExpired: true },
+  { date: "2023-12-06", isCurrentMonth: true, isExpired: true },
+  { date: "2023-12-07", isCurrentMonth: true, isToday: true },
   { date: "2023-12-08", isCurrentMonth: true },
   { date: "2023-12-09", isCurrentMonth: true },
   { date: "2023-12-10", isCurrentMonth: true },
@@ -47,7 +47,7 @@ interface Day {
   date: string;
   isCurrentMonth?: boolean;
   isToday?: boolean;
-  isSelected?: boolean;
+  isExpired?: boolean;
 }
 
 export default function DayBoxes() {
@@ -56,21 +56,13 @@ export default function DayBoxes() {
   );
 
   const handleDayClick = (date: string) => {
-    const selectedDay = createDate(date);
-    if (selectedDay && selectedDay >= currentDate) {
-      setSelectedDate(date);
-    }
+    setSelectedDate(date);
   };
 
   return (
     <>
       <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-700 text-sm shadow ring-1 ring-gray-600">
         {days.map((day: Day, dayIdx: number) => {
-          const dayDate = createDate(day.date);
-          let isExpired = true;
-          if (dayDate) {
-            isExpired = dayDate < currentDate;
-          }
           return (
             <div
               key={day.date}
@@ -79,24 +71,23 @@ export default function DayBoxes() {
             >
               <button
                 type="button"
-                onClick={() => !isExpired && handleDayClick(day.date)}
+                onClick={() => !day.isExpired && handleDayClick(day.date)}
                 className={classNames(
                   "absolute left-0 top-0 flex h-full w-full items-center justify-center transition duration-300",
-                  isExpired
+                  day.isExpired
                     ? "cursor-not-allowed bg-gray-900 text-gray-400"
                     : "hover:bg-gray-600",
                   day.isCurrentMonth ? "bg-gray-800" : "bg-gray-700",
-                  (day.isSelected ?? day.isToday) && "font-semibold",
-                  day.isSelected && "text-white",
-                  day.date == selectedDate && "bg-highlight",
-                  !day.isSelected &&
+                  day.isToday && "font-semibold",
+                  day.date == selectedDate && "bg-highlight text-white",
+                  !(day.date == selectedDate) &&
                     day.isCurrentMonth &&
                     !day.isToday &&
                     "text-gray-300",
-                  !day.isSelected &&
+                  !(day.date == selectedDate) &&
                     !day.isCurrentMonth &&
                     !day.isToday &&
-                    !isExpired &&
+                    !day.isExpired &&
                     "text-gray-500",
                   day.date == selectedDate &&
                     !day.isCurrentMonth &&
@@ -142,29 +133,6 @@ function getCurrentDateInEST() {
   const estTime = new Date(utc - estOffset);
   estTime.setHours(0, 0, 0, 0);
   return estTime;
-}
-
-function createDate(dateString: string): Date | null {
-  const parts = dateString.split("-");
-
-  if (parts.length !== 3) {
-    console.error("Invalid date format");
-    return null;
-  }
-
-  // Ensure each part is defined and then parse it, providing a fallback of 0
-  const year = parts[0] ? parseInt(parts[0], 10) : 0;
-  const month = parts[1] ? parseInt(parts[1], 10) : 0;
-  const day = parts[2] ? parseInt(parts[2], 10) : 0;
-
-  // Additional check for NaN values
-  if (isNaN(year) || isNaN(month) || isNaN(day)) {
-    console.error("Invalid date format");
-    return null;
-  }
-
-  // Create the date object
-  return new Date(year, month - 1, day);
 }
 
 function formatDate(date: Date): string {

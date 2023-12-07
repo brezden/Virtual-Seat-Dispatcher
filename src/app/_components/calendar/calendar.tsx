@@ -29,7 +29,7 @@ export default function Calendar() {
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
             </button>
           </div>
-          <div className="mt-6 grid grid-cols-7 text-xs leading-6 text-gray-500">
+          <div className="mt-6 grid grid-cols-7 text-xs leading-6 text-gray-200">
             <div>M</div>
             <div>T</div>
             <div>W</div>
