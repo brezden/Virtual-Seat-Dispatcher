@@ -63,7 +63,7 @@ export default function Calendar() {
     return false;
   }, [month, year]);
 
-  const selectedDate = searchParams.get("date") ?? currentDate;
+  const selectedDate = searchParams.get("date") ?? formatDate(currentDate);
 
   return (
     <>

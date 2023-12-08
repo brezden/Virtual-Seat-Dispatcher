@@ -1,9 +1,9 @@
-import DashboardProfile from "./navigationProfile";
+import BookProfile from "./navigationProfile";
 import { classNames } from "../../utils/classNames";
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard", current: true },
-  { name: "Book", href: "/book", current: false },
+  { name: "Book", href: "/Book", current: true },
+  { name: "Manage Bookings", href: "/manageBookings", current: false },
 ];
 
 export default function NavigationBar() {
@@ -33,7 +33,7 @@ export default function NavigationBar() {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <DashboardProfile />
+            <BookProfile />
           </div>
         </div>
       </div>

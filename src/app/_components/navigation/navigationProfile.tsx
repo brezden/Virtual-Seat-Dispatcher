@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "~/app/api/auth/[...nextauth]/options";
 import Image from "next/image";
 
-export default async function DashboardProfile() {
+export default async function BookProfile() {
   const session = await getServerSession(authOptions);
   const name = session?.user?.name ?? "Default Name";
   const email = session?.user?.email ?? "";

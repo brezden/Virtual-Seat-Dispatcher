@@ -2,7 +2,7 @@ import NavigationBar from "../_components/navigation/navigationBar";
 import Calendar from "../_components/calendar/calendar";
 import BookedMembers from "../_components/calendar/booked-members";
 
-export default function Dashboard({
+export default function Book({
   searchParams,
 }: {
   searchParams: Record<string, string | string[] | undefined>;
@@ -14,7 +14,7 @@ export default function Dashboard({
         <main>
           <div className="flex flex-col">
             <div className="mt-10 lg:grid lg:grid-cols-12 lg:gap-x-16">
-              <div className="lg:col-span-full xl:col-start-1 xl:col-end-9">
+              <div className="flex justify-center lg:col-span-full xl:col-start-1 xl:col-end-9">
                 <BookedMembers searchParams={searchParams} />
               </div>
               <Calendar />

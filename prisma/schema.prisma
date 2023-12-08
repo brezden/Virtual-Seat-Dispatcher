@@ -9,8 +9,22 @@ generator client {
 }
 
 model User {
-  id      Int     @id @default(autoincrement())
-  email   String  @unique
-  name    String?
-  picture String? @db.MediumText
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  name     String?
+  picture  String?   @db.MediumText
+  bookings Booking[] 
+}
+
+model Booking {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  startDate DateTime
+  endDate   DateTime?
+  allDay    Boolean?
+  location Int
+  guests    Boolean
+  @@index([userId])
 }

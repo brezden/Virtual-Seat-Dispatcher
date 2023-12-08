@@ -28,7 +28,8 @@
     "paths": {
       "~/*": ["./src/*"],
       "@utils/*": ["src/app/utils/*"],
-      "@store/*": ["src/app/store/*"]
+      "@store/*": ["src/app/store/*"],
+      "@types/*": ["src/app/types/*"]
     }
   },
   "include": [

@@ -9,6 +9,59 @@ export function getCurrentDateInEST() {
   return estTime;
 }
 
+export function getCurrentDateESTStringDash(): string {
+  const now = new Date();
+
+  // Convert the current time to Eastern Standard Time
+  // 'America/New_York' is typically used for EST
+  const estTime = now.toLocaleString("en-US", { timeZone: "America/New_York" });
+
+  // Convert the EST time string back to a Date object
+  const estDate = new Date(estTime);
+
+  // Format the date in YYYY-MM-DD format
+  const year = estDate.getFullYear();
+  const month = estDate.getMonth() + 1; // getMonth() returns 0-11
+  const day = estDate.getDate();
+
+  // Pad single digit month and day with leading zero
+  const formattedMonth = month < 10 ? `0${month}` : month;
+  const formattedDay = day < 10 ? `0${day}` : day;
+
+  return `${year}-${formattedMonth}-${formattedDay}`;
+}
+
+export function getCurrentDateESTString(): string {
+  const estOffset = 5 * 60; // EST is UTC-5 hours, converted to minutes
+  const now = new Date();
+  const estTime = new Date(now.getTime() - estOffset * 60000); // Adjust to EST
+
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const day = estTime.getDate();
+  const monthIndex = estTime.getMonth();
+  const year = estTime.getFullYear();
+
+  const suffixes = ["th", "st", "nd", "rd"];
+  const relevantSuffix =
+    day % 10 > 3 || Math.floor((day % 100) / 10) === 1 ? 0 : day % 10;
+
+  return `${months[monthIndex]} ${day}${suffixes[relevantSuffix]}, ${year}`;
+}
+
 export function formatDate(date: Date): string {
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
