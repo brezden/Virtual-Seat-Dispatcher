@@ -2,7 +2,7 @@ import BookProfile from "./navigationProfile";
 import { classNames } from "../../utils/classNames";
 
 const navigation = [
-  { name: "Book", href: "/Book", current: true },
+  { name: "Book", href: "/book", current: true },
   { name: "Manage Bookings", href: "/manageBookings", current: false },
 ];
 
