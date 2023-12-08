@@ -1,5 +1,5 @@
 import SignInButton from "src/app/_components/buttons/sign-in";
-import DashboardButton from "src/app/_components/buttons/dashboard";
+import BookButton from "src/app/_components/buttons/bookPage";
 import { getServerSession } from "next-auth/next";
 
 export default async function Home() {
@@ -11,7 +11,7 @@ export default async function Home() {
         <h1 className="text-5xl font-extrabold tracking-tight text-primary sm:text-[5rem]">
           Virtual Seat Dispatcher
         </h1>
-        {session ? <DashboardButton /> : <SignInButton />}
+        {session ? <BookButton /> : <SignInButton />}
       </div>
     </div>
   );

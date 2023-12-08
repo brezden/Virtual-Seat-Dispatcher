@@ -2,7 +2,7 @@ import NavigationBar from "../_components/navigation/navigationBar";
 import Calendar from "../_components/calendar/calendar";
 import BookedMembers from "../_components/calendar/booked-members";
 
-export default function Dashboard({
+export default function Book({
   searchParams,
 }: {
   searchParams: Record<string, string | string[] | undefined>;

@@ -10,7 +10,7 @@ export default function SignInButton() {
         type="button"
         className="inline-flex items-center gap-x-3 rounded-lg bg-highlight px-5 py-3 text-lg font-bold text-primary shadow-lg transition duration-300 ease-in-out hover:bg-highlight_hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-highlight"
         onClick={() => {
-          void signIn("azure-ad", { callbackUrl: "/dashboard" });
+          void signIn("azure-ad", { callbackUrl: "/Book" });
         }}
       >
         <MicrosoftIcon className="h-6 w-6" aria-hidden="true" />
