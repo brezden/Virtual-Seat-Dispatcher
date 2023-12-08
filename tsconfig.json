@@ -27,7 +27,8 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"],
-      "@utils/*": ["src/app/utils/*"]
+      "@utils/*": ["src/app/utils/*"],
+      "@store/*": ["src/app/store/*"]
     }
   },
   "include": [

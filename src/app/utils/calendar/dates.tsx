@@ -67,3 +67,31 @@ export function generateCalendarDays(inputMonth: string): Day[] {
 
   return days;
 }
+
+export function formatDateString(inputDate: string): string {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const date = new Date(inputDate);
+  const day = date.getUTCDate();
+  const monthIndex = date.getUTCMonth();
+  const year = date.getUTCFullYear();
+
+  const suffixes = ["th", "st", "nd", "rd"];
+  const relevantSuffix =
+    day % 10 > 3 || Math.floor((day % 100) / 10) === 1 ? 0 : day % 10;
+
+  return `${months[monthIndex]} ${day}${suffixes[relevantSuffix]}, ${year}`;
+}
