@@ -1,5 +1,9 @@
 import { CalendarIcon, MapPinIcon } from "@heroicons/react/20/solid";
-import { formatDateString } from "~/app/utils/calendar/dates";
+import {
+  formatDate,
+  formatDateString,
+  getCurrentDateESTString,
+} from "~/app/utils/calendar/dates";
 const meetings = [
   {
     id: 2,
@@ -33,6 +37,8 @@ const meetings = [
   },
 ];
 
+const currentDateEST = getCurrentDateESTString();
+
 export default function BookedMembers({
   searchParams,
 }: {
@@ -44,7 +50,7 @@ export default function BookedMembers({
     <div>
       <h2 className="text-white-900 text-lg font-medium leading-6">
         Booked Members for{" "}
-        {currentDate ? formatDateString(currentDate) : "selected date"}
+        {currentDate ? formatDateString(currentDate) : currentDateEST}
       </h2>
       <ol className="divide-ytext-sm mt-4 leading-6 lg:col-span-7 xl:col-span-8">
         {meetings.map((meeting) => (
