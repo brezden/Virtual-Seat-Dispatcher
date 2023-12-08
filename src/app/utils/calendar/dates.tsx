@@ -68,12 +68,8 @@ export function generateCalendarDays(inputMonth: string): Day[] {
   return days;
 }
 
-export function formatDateString(dateString: string): string {
-  // Create a new Date object from the input string
-  const date = new Date(dateString);
-
-  // Define an array of month names
-  const monthNames = [
+export function formatDateString(inputDate: string): string {
+  const months = [
     "January",
     "February",
     "March",
@@ -88,17 +84,14 @@ export function formatDateString(dateString: string): string {
     "December",
   ];
 
-  // Extract the day, month and year from the date
-  const day = date.getDate();
-  const month = monthNames[date.getMonth()];
-  const year = date.getFullYear();
+  const date = new Date(inputDate);
+  const day = date.getUTCDate();
+  const monthIndex = date.getUTCMonth();
+  const year = date.getUTCFullYear();
 
-  // Determine the ordinal suffix for the day
-  const suffix =
-    (day > 3 && day < 21) || day % 10 > 3
-      ? "th"
-      : ["st", "nd", "rd"][(day % 10) - 1];
+  const suffixes = ["th", "st", "nd", "rd"];
+  const relevantSuffix =
+    day % 10 > 3 || Math.floor((day % 100) / 10) === 1 ? 0 : day % 10;
 
-  // Return the formatted date string
-  return `${month} ${day}${suffix}, ${year}`;
+  return `${months[monthIndex]} ${day}${suffixes[relevantSuffix]}, ${year}`;
 }

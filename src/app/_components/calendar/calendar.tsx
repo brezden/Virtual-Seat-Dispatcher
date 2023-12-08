@@ -9,17 +9,18 @@ import {
 } from "../../utils/calendar/dates";
 import { classNames } from "../../utils/classNames";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
-import { calendarStore } from "~/app/store/calendarStore";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 const currentDate = getCurrentDateInEST();
 const currentMonth = currentDate.getMonth();
 const currentYear = currentDate.getFullYear();
 
 export default function Calendar() {
+  const searchParams = useSearchParams();
   const [month, setMonth] = useState(currentMonth);
   const [year, setYear] = useState(currentYear);
   const [days, setDays] = useState<Day[]>([]);
-  const { currentSelectedDate, updateDate } = calendarStore();
 
   useEffect(() => {
     setDays(generateCalendarDays(`${year}-${month + 1}`));
@@ -62,14 +63,7 @@ export default function Calendar() {
     return false;
   }, [month, year]);
 
-  const [selectedDate, setSelectedDate] = useState<string | null>(
-    formatDate(currentDate),
-  );
-
-  const handleDayClick = (date: string) => {
-    updateDate(date);
-    setSelectedDate(date);
-  };
+  const selectedDate = searchParams.get("date") ?? currentDate;
 
   return (
     <>
@@ -122,9 +116,9 @@ export default function Calendar() {
                 className="relative w-full"
                 style={{ paddingTop: "100%" }}
               >
-                <button
+                <Link
                   type="button"
-                  onClick={() => !day.isExpired && handleDayClick(day.date)}
+                  href={`?date=${day.date}`}
                   className={classNames(
                     "absolute left-0 top-0 flex h-full w-full items-center justify-center transition duration-300",
                     day.isExpired
@@ -160,7 +154,7 @@ export default function Calendar() {
                   >
                     {day.date.split("-").pop()?.replace(/^0/, "") ?? ""}
                   </time>
-                </button>
+                </Link>
               </div>
             );
           })}
