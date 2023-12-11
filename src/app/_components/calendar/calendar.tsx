@@ -11,6 +11,7 @@ import { classNames } from "../../utils/classNames";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { AvailableMembers } from "./available-members";
 
 const currentDate = getCurrentDateInEST();
 const currentMonth = currentDate.getMonth();

@@ -19,8 +19,7 @@ export default async function BookedMembers({
   return (
     <div className="justify-center">
       <h2 className="text-white-900 text-center text-lg font-medium leading-6">
-        Booked Members for{" "}
-        {currentDate ? formatDateString(currentDate) : currentDateEST}
+        Booked Members
       </h2>
 
       {meetings.length > 0 ? (
