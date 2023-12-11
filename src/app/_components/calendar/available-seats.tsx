@@ -10,7 +10,7 @@ export default async function AvailableMembers({
   return (
     <div className="justify-center">
       <h2 className="text-white-900 text-center text-lg font-medium leading-6">
-        Available Desks
+        Available Seats
       </h2>
       <DeskSelection />
     </div>
