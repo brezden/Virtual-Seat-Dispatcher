@@ -12,12 +12,14 @@ export default function Book({
       <NavigationBar />
       <div className="mx-auto px-6 py-6 sm:px-6 lg:px-12">
         <main>
-          <div className="flex flex-col">
+          <div className="flex h-full flex-col justify-center px-12">
             <div className="mt-10 lg:grid lg:grid-cols-12 lg:gap-x-16">
-              <div className="flex justify-center lg:col-span-full xl:col-start-1 xl:col-end-9">
+              <div className="lg:col-span-8 xl:col-start-1 xl:col-end-9">
                 <BookedMembers searchParams={searchParams} />
               </div>
-              <Calendar />
+              <div className="lg:col-span-4 xl:col-start-9 xl:col-end-13">
+                <Calendar />
+              </div>
             </div>
           </div>
         </main>

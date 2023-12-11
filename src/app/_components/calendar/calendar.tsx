@@ -82,7 +82,7 @@ export default function Calendar() {
             <div className="h-5 w-5"></div>
           )}
 
-          <div className="flex-auto text-sm font-semibold text-white">
+          <div className="flex-auto font-semibold text-white sm:text-base md:text-base lg:text-lg xl:text-lg">
             {getMonthYearHeader}
           </div>
 
@@ -99,7 +99,7 @@ export default function Calendar() {
             <div className="h-5 w-5"></div>
           )}
         </div>
-        <div className="mt-6 grid grid-cols-7 text-xs leading-6 text-gray-200">
+        <div className="mt-6 grid grid-cols-7 leading-6 text-gray-200 sm:text-base md:text-base lg:text-lg xl:text-lg">
           <div>M</div>
           <div>T</div>
           <div>W</div>
@@ -108,7 +108,7 @@ export default function Calendar() {
           <div>S</div>
           <div>S</div>
         </div>
-        <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-700 text-sm shadow ring-1 ring-gray-600">
+        <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-700 text-sm shadow ring-1 ring-gray-600 sm:text-base md:text-lg lg:text-xl xl:text-2xl">
           {days.map((day: Day, dayIdx: number) => {
             return (
               <div
@@ -161,7 +161,7 @@ export default function Calendar() {
         </div>
         <button
           type="button"
-          className="mt-8 w-full rounded-md bg-highlight px-3 py-3 text-sm font-semibold text-white shadow transition duration-300 ease-in-out hover:bg-highlight_hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-highlight_hover"
+          className="mt-8 w-full rounded-md bg-highlight px-3 py-3 text-lg font-semibold text-white shadow transition duration-300 ease-in-out hover:bg-highlight_hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-highlight_hover"
         >
           Book Seat
         </button>

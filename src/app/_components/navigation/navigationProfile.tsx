@@ -6,19 +6,20 @@ export default async function BookProfile() {
   const session = await getServerSession(authOptions);
   const name = session?.user?.name ?? "Default Name";
   const email = session?.user?.email ?? "";
+
   return (
     <div className="flex flex-row pt-0.5">
-      <div className="mr-2 flex flex-col pr-1.5 text-right">
-        <p className="hidden text-lg sm:block"> {name} </p>
-        <p className="hidden text-sm opacity-40 sm:block">{email}</p>
+      <div className="mr-2 flex flex-col justify-center pr-1.5 text-right">
+        <p className="hidden text-lg sm:block lg:text-xl"> {name} </p>
+        <p className="lg:text-md hidden text-sm opacity-40 sm:block">{email}</p>
       </div>
 
       {session?.user?.image ? (
-        <span className="inline-block h-12 w-12 overflow-hidden rounded-full border border-transparent sm:h-10 sm:w-10">
+        <span className="inline-block h-12 w-12 overflow-hidden rounded-full border border-transparent sm:h-10 sm:w-10 lg:h-16 lg:w-16">
           <Image src={session.user.image} alt={name} width={200} height={200} />
         </span>
       ) : (
-        <span className="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100 sm:h-10 sm:w-10">
+        <span className="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100 sm:h-10 sm:w-10 lg:h-16 lg:w-16">
           <svg
             className="h-full w-full text-gray-300"
             fill="currentColor"
