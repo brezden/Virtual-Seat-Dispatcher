@@ -1,38 +1,58 @@
 "use client";
-
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { classNames } from "../../utils/classNames";
-import { useSearchParams } from "next/navigation";
-import { useQueryState } from "next-usequerystate";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const seats = ["0930", "0945"];
 
 export default function StartTimeSelection() {
-  const searchParams = useSearchParams()!
-  const [selected, setSelected] = useQueryState("startTime");
-  const disabledValue = searchParams.get("allDay");
-  const isDisabled = disabledValue === "true";
-  
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams()!;
+  const [selected, setSelected] = useState("0930");
+  const [isDisabled, setIsDisabled] = useState(searchParams.get("allDayStatus") === "true");
+
+  useEffect(() => {
+    setIsDisabled(searchParams.get("allDayStatus") === "true");
+  }, [searchParams]);
+
+  const createQueryString = (name: string, value: string) => {
+    setSelected(value);
+    const params = new URLSearchParams(searchParams);
+    params.set(name, value);
+    return params.toString();
+  };
+
   return (
-    <Listbox disabled={isDisabled} value={selected} onChange={(newTime) => setSelected(newTime)}>
+    <Listbox
+      disabled={isDisabled}
+      value={selected}
+      onChange={(newTime) => {
+        router.push(pathname + "?" + createQueryString("startTime", newTime));
+      }}
+    >
       {({ open }) => (
         <>
           <div className="relative">
-            <Listbox.Label className="block text-sm font-medium leading-6 text-primary text-center">
+            <Listbox.Label className="block text-center text-sm font-medium leading-6 text-primary">
               Start Time
             </Listbox.Label>
-            <Listbox.Button className={classNames(
-              "relative w-full cursor-default rounded-md py-1.5 pl-3 pr-10 text-left shadow-sm ring-1 ring-inset sm:text-sm sm:leading-6",
-              disabledValue ? "bg-gray-400 text-gray-500 cursor-not-allowed" : "bg-gray-700 text-primary ring-gray-500 focus:outline-none focus:ring-2 focus:ring-highlight_hover"
-            )}>
+            <Listbox.Button
+              className={classNames(
+                "relative w-full cursor-default rounded-md py-1.5 pl-3 pr-10 text-left shadow-sm ring-1 ring-inset sm:text-sm sm:leading-6",
+                isDisabled
+                  ? "cursor-not-allowed bg-gray-400 text-gray-500"
+                  : "bg-gray-700 text-primary ring-gray-500 focus:outline-none focus:ring-2 focus:ring-highlight_hover",
+              )}
+            >
               <span className="block truncate">{selected}</span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                 <ChevronUpDownIcon
                   className={classNames(
                     "h-5 w-5",
-                    disabledValue ? "text-gray-500" : "text-gray-400"
+                    isDisabled ? "text-gray-500" : "text-gray-400",
                   )}
                   aria-hidden="true"
                 />

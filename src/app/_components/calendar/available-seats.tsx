@@ -12,7 +12,7 @@ export default async function AvailableMembers({
     <div className="flex flex-col gap-5 justify-center pt-4">
       <DeskSelection />
       <div className="grid grid-cols-3 lg:gap-x-3 justify-center">
-        <StartTimeSelection />
+        <StartTimeSelection/>
         <EndTimeSelection />
         <AllDayToggle />
       </div>
