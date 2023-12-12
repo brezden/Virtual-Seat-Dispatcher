@@ -15,6 +15,10 @@ export default {
         background: '#082f49',
         ...defaultColors
       },
+      screens: {
+        '1xl': '1600px',
+        '2xl': '2000px',
+      },
     },
   },
   plugins: [],

@@ -14,15 +14,13 @@ export default function Book({
       <div className="mx-auto px-6 py-6 sm:px-6 lg:px-12">
         <main>
           <div className="flex h-full flex-col justify-center px-12">
-            <div className="mt-10 lg:grid lg:grid-cols-12 lg:gap-x-16">
-              <div className="lg:col-span-4 xl:col-start-1 xl:col-end-4">
+            <div className="mt-10 lg:grid lg:grid-cols-2 lg:gap-x-16">
+              <div className="lg:col-span-4 xl:col-start-1 xl:col-end-2">
                 <BookedMembers searchParams={searchParams} />
               </div>
-              <div className="lg:col-span-4 xl:col-start-5 xl:col-end-9">
-                <AvailableMembers searchParams={searchParams} />
-              </div>
-              <div className="lg:col-span-4 xl:col-start-9 xl:col-end-13">
+              <div className="lg:col-span-4 xl:col-start-2 xl:col-end-3">
                 <Calendar />
+                <AvailableMembers searchParams={searchParams} />
               </div>
             </div>
           </div>

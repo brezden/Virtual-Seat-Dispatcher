@@ -1,46 +1,18 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { classNames } from "../../utils/classNames";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useQueryState } from "next-usequerystate";
 
-const seats = [
-  { id: 1 },
-  { id: 2 },
-  { id: 3 },
-  { id: 4 },
-  { id: 5 },
-  { id: 6 },
-  { id: 7 },
-  { id: 8 },
-  { id: 9 },
-  { id: 10 },
-];
+const seats = [{ id: "1" }, { id: "2" }];
 
 export default function DeskSelection() {
-  const [selected, setSelected] = useState(seats[3]);
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const handleSelectionChange = (seat: { id: number } | undefined) => {
-    if (!seat) return;
-    setSelected(seat);
-
-    const current = new URLSearchParams(Array.from(searchParams.entries()));
-
-    current.set("deskid", seat.id.toString());
-
-    const search = current.toString();
-    const query = search ? `?${search}` : "";
-
-    router.push(`${pathname}${query}`);
-  };
+  const [selected, setSelected] = useQueryState("deskid");
 
   return (
-    <Listbox value={selected} onChange={handleSelectionChange}>
+    <Listbox value={selected} onChange={(e) => setSelected(e.id)}>
       {({ open }) => (
         <>
           <Listbox.Label className="block text-sm font-medium leading-6 text-primary">
@@ -48,7 +20,7 @@ export default function DeskSelection() {
           </Listbox.Label>
           <div className="relative mt-2">
             <Listbox.Button className="relative w-full cursor-default rounded-md bg-gray-700 py-1.5 pl-3 pr-10 text-left text-primary shadow-sm ring-1 ring-inset ring-gray-500 focus:outline-none focus:ring-2 focus:ring-highlight_hover sm:text-sm sm:leading-6">
-              <span className="block truncate">Desk {selected?.id ?? "1"}</span>
+              <span className="block truncate">Desk {selected ?? "1"}</span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                 <ChevronUpDownIcon
                   className="h-5 w-5 text-gray-400"

@@ -11,7 +11,6 @@ import { classNames } from "../../utils/classNames";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { AvailableMembers } from "./available-members";
 
 const currentDate = getCurrentDateInEST();
 const currentMonth = currentDate.getMonth();
@@ -68,7 +67,7 @@ export default function Calendar() {
 
   return (
     <>
-      <div className="text-center lg:col-start-8 lg:col-end-13 lg:row-start-1 xl:col-start-9">
+      <div className="xl:px-12 1xl:px-24 2xl:px-48 text-center lg:col-start-8 lg:col-end-13 lg:row-start-1 xl:col-start-9">
         <div className="flex items-center justify-between text-gray-900">
           {!isCurrentMonth() ? (
             <button
@@ -160,12 +159,6 @@ export default function Calendar() {
             );
           })}
         </div>
-        <button
-          type="button"
-          className="mt-8 w-full rounded-md bg-highlight px-3 py-3 text-lg font-semibold text-white shadow transition duration-300 ease-in-out hover:bg-highlight_hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-highlight_hover"
-        >
-          Book Seat
-        </button>
       </div>
     </>
   );

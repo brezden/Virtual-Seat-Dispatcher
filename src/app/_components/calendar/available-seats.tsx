@@ -9,10 +9,15 @@ export default async function AvailableMembers({
 
   return (
     <div className="justify-center">
-      <h2 className="text-white-900 text-center text-lg font-medium leading-6">
-        Available Seats
-      </h2>
-      <DeskSelection />
+      <div className="px-12">
+        <DeskSelection />
+      </div>
+      <button
+          type="button"
+          className="mt-8 w-full rounded-md bg-highlight px-3 py-3 text-lg font-semibold text-white shadow transition duration-300 ease-in-out hover:bg-highlight_hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-highlight_hover"
+        >
+          Book Seat
+        </button>
     </div>
   );
 }
