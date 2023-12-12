@@ -18,7 +18,7 @@ export default function Book({
               <div className="lg:col-span-4 xl:col-start-1 xl:col-end-2">
                 <BookedMembers searchParams={searchParams} />
               </div>
-              <div className="lg:col-span-4 xl:col-start-2 xl:col-end-3">
+              <div className="lg:col-span-4 xl:col-start-2 xl:col-end-3 xl:px-12 1xl:px-24 2xl:px-48 ">
                 <Calendar />
                 <AvailableMembers searchParams={searchParams} />
               </div>

@@ -67,7 +67,7 @@ export default function Calendar() {
 
   return (
     <>
-      <div className="xl:px-12 1xl:px-24 2xl:px-48 text-center lg:col-start-8 lg:col-end-13 lg:row-start-1 xl:col-start-9">
+      <div className="text-center lg:col-start-8 lg:col-end-13 lg:row-start-1 xl:col-start-9">
         <div className="flex items-center justify-between text-gray-900">
           {!isCurrentMonth() ? (
             <button
