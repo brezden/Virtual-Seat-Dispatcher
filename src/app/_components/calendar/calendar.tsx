@@ -18,6 +18,7 @@ const currentYear = currentDate.getFullYear();
 
 export default function Calendar() {
   const searchParams = useSearchParams();
+  let params: URLSearchParams;
   const [month, setMonth] = useState(currentMonth);
   const [year, setYear] = useState(currentYear);
   const [days, setDays] = useState<Day[]>([]);
@@ -65,6 +66,12 @@ export default function Calendar() {
 
   const selectedDate = searchParams.get("date") ?? formatDate(currentDate);
 
+  const createQueryString = (name: string, value: string) => {
+    params = new URLSearchParams(searchParams);
+    params.set(name, value);
+    return params.toString();
+  };
+
   return (
     <>
       <div className="text-center lg:col-start-8 lg:col-end-13 lg:row-start-1 xl:col-start-9">
@@ -110,6 +117,7 @@ export default function Calendar() {
         </div>
         <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-700 text-sm shadow ring-1 ring-gray-600 sm:text-base md:text-lg lg:text-xl xl:text-2xl">
           {days.map((day: Day, dayIdx: number) => {
+            createQueryString("date", day.date)
             return (
               <div
                 key={day.date}
@@ -118,7 +126,7 @@ export default function Calendar() {
               >
                 <Link
                   type="button"
-                  href={`?date=${day.date}`}
+                  href={`?${params.toString()}`}
                   className={classNames(
                     "absolute left-0 top-0 flex h-full w-full items-center justify-center transition duration-300",
                     day.isExpired
