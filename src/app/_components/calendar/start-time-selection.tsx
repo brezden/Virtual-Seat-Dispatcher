@@ -1,36 +1,22 @@
 "use client";
 
-import { Fragment, useCallback, useState } from "react";
+import { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { classNames } from "../../utils/classNames";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useQueryState } from "next-usequerystate";
 
 const seats = ["0930", "0945"];
 
 export default function StartTimeSelection() {
-  const router = useRouter()
-  const pathname = usePathname()
   const searchParams = useSearchParams()!
-  const [selected, setSelected] = useState("0930");
+  const [selected, setSelected] = useQueryState("startTime");
   const disabledValue = searchParams.get("allDay");
   const isDisabled = disabledValue === "true";
-
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      console.log(value);
-      setSelected(value)
-      const params = new URLSearchParams(searchParams)
-      params.set(name, value)
- 
-      return params.toString()
-    },
-    [searchParams]
-  )
   
-
   return (
-    <Listbox disabled={isDisabled} value={selected} onChange={(newTime) => {router.push(pathname + '?' + createQueryString('startTime', newTime))}}>
+    <Listbox disabled={isDisabled} value={selected} onChange={(newTime) => setSelected(newTime)}>
       {({ open }) => (
         <>
           <div className="relative">

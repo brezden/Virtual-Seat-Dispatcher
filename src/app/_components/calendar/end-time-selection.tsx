@@ -6,13 +6,13 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { classNames } from "../../utils/classNames";
 import { useQueryState } from "next-usequerystate";
 
-const seats = [{ id: "2:30pm" }, { id: "2:45pm" }];
+const seats = ["1430", "1445"];
 
 export default function EndTimeSelection() {
   const [selected, setSelected] = useQueryState("endTime");
 
   return (
-    <Listbox value={selected} onChange={(e) => setSelected(e.id)}>
+    <Listbox value={selected} onChange={(newTime) => setSelected(newTime)}>
       {({ open }) => (
         <>
           <div className="relative">
@@ -39,7 +39,7 @@ export default function EndTimeSelection() {
               <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-gray-700 py-1 text-base shadow-lg ring-1 ring-gray-500 ring-opacity-5 focus:outline-none sm:text-sm">
                 {seats.map((seat) => (
                   <Listbox.Option
-                    key={seat.id}
+                    key={seat}
                     className={({ active }) =>
                       classNames(
                         active
@@ -58,7 +58,7 @@ export default function EndTimeSelection() {
                             "block truncate",
                           )}
                         >
-                          {seat.id}
+                          {seat}
                         </span>
 
                         {selected ? (

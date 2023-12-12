@@ -6,13 +6,13 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { classNames } from "../../utils/classNames";
 import { useQueryState } from "next-usequerystate";
 
-const seats = [{ id: "1" }, { id: "2" }];
+const seats = ["1", "2"];
 
 export default function DeskSelection() {
   const [selected, setSelected] = useQueryState("deskid");
 
   return (
-    <Listbox value={selected} onChange={(e) => setSelected(e.id)}>
+    <Listbox value={selected} onChange={(deskID) => setSelected(deskID)}>
       {({ open }) => (
         <>
           <div className="relative">
@@ -39,7 +39,7 @@ export default function DeskSelection() {
               <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-gray-700 py-1 text-base shadow-lg ring-1 ring-gray-500 ring-opacity-5 focus:outline-none sm:text-sm">
                 {seats.map((seat) => (
                   <Listbox.Option
-                    key={seat.id}
+                    key={seat}
                     className={({ active }) =>
                       classNames(
                         active
@@ -58,7 +58,7 @@ export default function DeskSelection() {
                             "block truncate",
                           )}
                         >
-                          Desk {seat.id}
+                          Desk {seat}
                         </span>
 
                         {selected ? (
