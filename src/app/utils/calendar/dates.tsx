@@ -148,3 +148,41 @@ export function formatDateString(inputDate: string): string {
 
   return `${months[monthIndex]} ${day}${suffixes[relevantSuffix]}, ${year}`;
 }
+
+export function createDateFromDateTime(date: string, startTime: string): Date {
+  // Regular expressions to extract date and time components
+  const dateRegex = /^(\d{4})-(\d{2})-(\d{2})$/;
+  const timeRegex = /^(\d{2})(\d{2})$/;
+
+  // Extracting and validating the date components
+  const dateMatch = date.match(dateRegex);
+  if (!dateMatch) {
+    throw new Error("Invalid date format. Expected format: YYYY-MM-DD");
+  }
+  const yearStr = dateMatch[1];
+  const monthStr = dateMatch[2];
+  const dayStr = dateMatch[3];
+
+  // Extracting and validating the time components
+  const timeMatch = startTime.match(timeRegex);
+  if (!timeMatch) {
+    throw new Error("Invalid time format. Expected format: HHMM");
+  }
+  const hoursStr = timeMatch[1];
+  const minutesStr = timeMatch[2];
+
+  // Validating that all components are defined
+  if (!yearStr || !monthStr || !dayStr || !hoursStr || !minutesStr) {
+    throw new Error("Date or time component is missing");
+  }
+
+  // Parsing the components into numbers
+  const year = parseInt(yearStr, 10);
+  const month = parseInt(monthStr, 10) - 1; // Month is 0-indexed in JavaScript
+  const day = parseInt(dayStr, 10);
+  const hours = parseInt(hoursStr, 10);
+  const minutes = parseInt(minutesStr, 10);
+
+  // Creating the date object
+  return new Date(year, month, day, hours, minutes);
+}

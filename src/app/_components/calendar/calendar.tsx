@@ -18,6 +18,7 @@ const currentYear = currentDate.getFullYear();
 
 export default function Calendar() {
   const searchParams = useSearchParams();
+  let params: URLSearchParams;
   const [month, setMonth] = useState(currentMonth);
   const [year, setYear] = useState(currentYear);
   const [days, setDays] = useState<Day[]>([]);
@@ -65,6 +66,12 @@ export default function Calendar() {
 
   const selectedDate = searchParams.get("date") ?? formatDate(currentDate);
 
+  const createQueryString = (name: string, value: string) => {
+    params = new URLSearchParams(searchParams);
+    params.set(name, value);
+    return params.toString();
+  };
+
   return (
     <>
       <div className="text-center lg:col-start-8 lg:col-end-13 lg:row-start-1 xl:col-start-9">
@@ -82,7 +89,7 @@ export default function Calendar() {
             <div className="h-5 w-5"></div>
           )}
 
-          <div className="flex-auto text-sm font-semibold text-white">
+          <div className="flex-auto font-semibold text-white sm:text-base md:text-base lg:text-lg xl:text-lg">
             {getMonthYearHeader}
           </div>
 
@@ -99,7 +106,7 @@ export default function Calendar() {
             <div className="h-5 w-5"></div>
           )}
         </div>
-        <div className="mt-6 grid grid-cols-7 text-xs leading-6 text-gray-200">
+        <div className="mt-6 grid grid-cols-7 leading-6 text-gray-200 sm:text-base md:text-base lg:text-lg xl:text-lg">
           <div>M</div>
           <div>T</div>
           <div>W</div>
@@ -108,8 +115,9 @@ export default function Calendar() {
           <div>S</div>
           <div>S</div>
         </div>
-        <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-700 text-sm shadow ring-1 ring-gray-600">
+        <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-700 text-sm shadow ring-1 ring-gray-600 sm:text-base md:text-lg lg:text-xl xl:text-2xl">
           {days.map((day: Day, dayIdx: number) => {
+            createQueryString("date", day.date)
             return (
               <div
                 key={day.date}
@@ -118,7 +126,7 @@ export default function Calendar() {
               >
                 <Link
                   type="button"
-                  href={`?date=${day.date}`}
+                  href={`?${params.toString()}`}
                   className={classNames(
                     "absolute left-0 top-0 flex h-full w-full items-center justify-center transition duration-300",
                     day.isExpired
@@ -159,12 +167,6 @@ export default function Calendar() {
             );
           })}
         </div>
-        <button
-          type="button"
-          className="mt-8 w-full rounded-md bg-highlight px-3 py-3 text-sm font-semibold text-white shadow transition duration-300 ease-in-out hover:bg-highlight_hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-highlight_hover"
-        >
-          Book Seat
-        </button>
       </div>
     </>
   );
