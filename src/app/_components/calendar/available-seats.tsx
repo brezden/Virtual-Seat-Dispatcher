@@ -5,15 +5,51 @@ import AllDayToggle from "../buttons/all-day-toggle";
 import StartTimeSelection from "./start-time-selection";
 import EndTimeSelection from "./end-time-selection";
 import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { api } from "~/trpc/react";
-
-
+import { createDateFromDateTime } from "../../utils/calendar/dates";
+import { Booking } from "../../types/meeting";
 
 export default function AvailableMembers() {
-  const { data: session, status } = useSession()
+  const router = useRouter()
+  const searchParams = useSearchParams();
+  const { data: session } = useSession()
   const userEmail = session?.user?.email;
-  const bookSeat = api.meeting.createSeat.useMutation();
+  const bookSeat = api.meeting.createSeat.useMutation(
+    {
+      onSuccess: () => {
+        router.refresh();
+      }
+    }
+  )
+
+  function addBooking() {
+    const date = searchParams.get("date");
+    const allDayStatus = searchParams.get("allDayStatus");
+    const startTime = searchParams.get("startTime");
+  
+    // Prepare common booking data
+    const bookingData: Booking = {
+      userEmail: userEmail ?? "",
+      startDate: new Date(date!),
+      allDay: allDayStatus === "true",
+      location: 1,
+      guests: false
+    };
+  
+    // Modify booking data based on allDayStatus
+    if (allDayStatus === "false") {
+      const endTime = searchParams.get("endTime");
+      bookingData.startDate = createDateFromDateTime(date!, startTime!);
+      bookingData.endDate = createDateFromDateTime(date!, endTime!);
+      delete bookingData.allDay; // Remove allDay field for non-all-day bookings
+    }
+  
+    // Execute the mutate call with the prepared booking data
+    bookSeat.mutate(bookingData);
+  }
+  
+
   return (
     <div className="flex flex-col gap-5 justify-center pt-4">
       <DeskSelection />
@@ -27,13 +63,7 @@ export default function AvailableMembers() {
             type="button"
             className="w-full rounded-md bg-highlight px-3 py-3 text-lg font-semibold text-white shadow transition duration-300 ease-in-out hover:bg-highlight_hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-highlight_hover"
             onClick={() => {
-              bookSeat.mutate({
-                userEmail: userEmail ?? "",
-                startDate: new Date("2021-10-10T10:00:00.000Z") ,
-                endDate: new Date("2021-10-10T11:00:00.000Z"),
-                location: 1,
-                guests: false
-              })
+              addBooking()
             }}
             >
             Book Seat

@@ -7,3 +7,12 @@ export interface BookingData {
   allDay: boolean | null;
   location: string;
 }
+
+export interface Booking {
+  userEmail: string;
+  startDate: Date;
+  endDate?: Date;
+  allDay?: boolean;
+  location: number;
+  guests: boolean;
+}
