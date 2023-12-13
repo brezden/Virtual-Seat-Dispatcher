@@ -19,12 +19,14 @@ model User {
 model Booking {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+  userEmail String
+  user      User     @relation(fields: [userEmail], references: [email])
   startDate DateTime
   endDate   DateTime?
   allDay    Boolean?
   location Int
   guests    Boolean
-  @@index([userId])
+  @@index([userEmail])
 }
+
+

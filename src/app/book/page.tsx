@@ -3,7 +3,7 @@ import Calendar from "../_components/calendar/calendar";
 import BookedMembers from "../_components/calendar/booked-members";
 import AvailableMembers from "../_components/calendar/available-seats";
 
-export default function Book({
+export default async function Book({
   searchParams,
 }: {
   searchParams: Record<string, string | string[] | undefined>;
@@ -20,7 +20,7 @@ export default function Book({
               </div>
               <div className="lg:col-span-4 xl:col-start-2 xl:col-end-3 xl:px-12 1xl:px-24 2xl:px-48 ">
                 <Calendar />
-                <AvailableMembers searchParams={searchParams} />
+                <AvailableMembers/>
               </div>
             </div>
           </div>
