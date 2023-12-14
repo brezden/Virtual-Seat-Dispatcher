@@ -9,6 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { api } from "~/trpc/react";
 import { createDateFromDateTime } from "../../utils/calendar/dates";
 import type { Booking } from "../../types/meeting";
+import TimeSelection from "./time-selection";
 
 export default function AvailableMembers() {
   const router = useRouter()
@@ -55,8 +56,9 @@ export default function AvailableMembers() {
     <div className="flex flex-col gap-5 justify-center pt-4">
       <DeskSelection />
       <div className="grid grid-cols-3 lg:gap-x-3 justify-center">
-        <StartTimeSelection/>
-        <EndTimeSelection />
+        <TimeSelection />
+        {/* <StartTimeSelection/>
+        <EndTimeSelection /> */}
         <AllDayToggle />
       </div>
       <div className="pt-3">

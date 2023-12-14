@@ -209,3 +209,17 @@ export function convertUtcToEst(time: string): string {
 
   return `${formattedHours}:${minutes} ${ampm}`;
 }
+
+export function isEarlier(time1: string, time2: string): boolean {
+  // Helper function to convert time string to minutes since midnight
+  const toMinutes = (time: string): number => {
+      const [hours, minutes] = time.split(":").map(Number);
+      if (hours !== undefined && minutes !== undefined) return hours * 60 + minutes;
+      return 0;
+  };
+
+  // Convert each time to minutes since midnight and compare
+  const minutes1 = toMinutes(time1);
+  const minutes2 = toMinutes(time2);
+  return minutes1 < minutes2;
+}

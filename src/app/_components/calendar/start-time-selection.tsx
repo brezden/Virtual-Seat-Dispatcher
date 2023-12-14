@@ -4,8 +4,7 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { classNames } from "../../utils/classNames";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { utcToZonedTime } from "date-fns-tz";
-import { addMinutes, format } from "date-fns";
+import { addMinutes } from "date-fns";
 import { convertUtcToEst } from "../../utils/calendar/dates";
 
 export default function StartTimeSelection() {
@@ -18,6 +17,7 @@ export default function StartTimeSelection() {
 
   useEffect(() => {
     setIsDisabled(searchParams.get("allDayStatus") === "true");
+    setSeats(generateTimeSlots());
   }, [searchParams]);
 
   const generateTimeSlots = () => {
@@ -25,7 +25,7 @@ export default function StartTimeSelection() {
     startEST.setUTCHours(12, 0, 0, 0); // 7am EST is 12pm UTC
     const endEST = new Date();
     endEST.setUTCHours(23, 0, 0, 0); // 6pm EST is 11pm UTC
-
+    
     let currentTime = startEST;
     const timeSlots = [];
     while (currentTime <= endEST) {
@@ -34,7 +34,7 @@ export default function StartTimeSelection() {
     }
     return timeSlots;
   };
-
+    
   // Initial seats are now generated from the function
   const [seats, setSeats] = useState(generateTimeSlots());
   const [selected, setSelected] = useState(seats[0] ?? "12:00");
@@ -47,6 +47,7 @@ export default function StartTimeSelection() {
   };
 
   const handleTimeChange = (newTime: string) => {
+    console.log(newTime)
     router.push(pathname + "?" + createQueryString("startTime", newTime));
   };
 
@@ -56,9 +57,9 @@ export default function StartTimeSelection() {
 
   return (
     <Listbox
-      disabled={isDisabled}
-      value={selected}
-      onChange={handleTimeChange}
+    disabled={isDisabled}
+    value={selected}
+    onChange={handleTimeChange}
     >
       {({ open }) => (
         <>
