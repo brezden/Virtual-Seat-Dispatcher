@@ -18,66 +18,8 @@ export default async function BookedMembers({
         Booked Members
       </h2>
       <div className="items-center pt-3">
-        <MapViewToggle />
+        <MapViewToggle meetings={meetings} />
       </div>
-
-      {meetings.length > 0 ? (
-        <div className="flex h-full w-full items-center justify-center pt-2">
-          <ol className={`mt-4 ${isSingleRow ? 'flex justify-center' : 'grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-2'}`}>
-            {meetings.map((meeting) => (
-              <li
-                key={meeting.id}
-                className="relative flex space-x-6 py-6 xl:static"
-              >
-                <Image
-                  src={meeting.imageUrl ?? ""}
-                  alt="User Profile Picture"
-                  className="rounded-full object-cover object-center"
-                  width={100}
-                  height={100}
-                />
-                <div className="flex-auto">
-                  <h2 className="text-white-600 pr-10 text-xl font-semibold">
-                    {meeting.name}
-                  </h2>
-                  <dl className="mt-2 flex flex-col text-gray-500">
-                    <div className="flex items-start space-x-3">
-                      <dt className="mt-0.5">
-                        <span className="sr-only">Date</span>
-                        <CalendarIcon
-                          className="h-5 w-5 lg:h-6 lg:w-6  text-gray-400"
-                          aria-hidden="true"
-                        />
-                      </dt>
-                      {meeting.allDay ? (
-                        <dd className="text-sm lg:text-lg">All Day</dd>
-                      ) : (
-                        <dd className="text-sm lg:text-lg">{meeting.enddate}</dd>
-                      )}
-                    </div>
-                    <div className="mt-2 flex items-start space-x-3 ">
-                      <dt className="mt-0.5">
-                        <span className="sr-only">Location</span>
-                        <MapPinIcon
-                          className="h-5 w-5 lg:h-6 lg:w-6 text-gray-400"
-                          aria-hidden="true"
-                        />
-                      </dt>
-                      <dd className="text-sm lg:text-lg">{meeting.location}</dd>
-                    </div>
-                  </dl>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
-      ) : (
-        <div className="flex h-full w-full items-center justify-center pt-6">
-          <h3 className="text-xl font-medium text-slate-400">
-            No members booked for today.
-          </h3>
-        </div>
-      )}
     </div>
   );
 }
