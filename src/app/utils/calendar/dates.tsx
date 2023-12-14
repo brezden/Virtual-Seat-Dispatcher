@@ -188,3 +188,24 @@ export function createDateFromDateTime(date: string, startTime: string): Date {
   const utcDate = new Date(Date.UTC(year, month, day, hours + 5, minutes));
   return utcDate;
 }
+
+export function convertUtcToEst(time: string): string {
+  // Parse the time as UTC
+  const utcDate = new Date(`1970-01-01T${time}:00Z`);
+
+  // Convert UTC to EST (UTC-5)
+  const estOffset = 5 * 60 * 60 * 1000; // 5 hours in milliseconds
+  const estDate = new Date(utcDate.getTime() - estOffset);
+
+  // Convert to 12-hour format
+  let hours = estDate.getUTCHours();
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+
+  // Format the time
+  const formattedHours = hours.toString().padStart(2, '0');
+  const minutes = estDate.getUTCMinutes().toString().padStart(2, '0');
+
+  return `${formattedHours}:${minutes} ${ampm}`;
+}

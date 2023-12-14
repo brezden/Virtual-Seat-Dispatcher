@@ -6,12 +6,12 @@ import { classNames } from "../../utils/classNames";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { utcToZonedTime } from "date-fns-tz";
 import { addMinutes, format } from "date-fns";
+import { convertUtcToEst } from "../../utils/calendar/dates";
 
 export default function StartTimeSelection() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams()!;
-  const [selected, setSelected] = useState("0930");
   const [isDisabled, setIsDisabled] = useState(
     searchParams.get("allDayStatus") === "true",
   );
@@ -37,12 +37,7 @@ export default function StartTimeSelection() {
 
   // Initial seats are now generated from the function
   const [seats, setSeats] = useState(generateTimeSlots());
-
-  const convertUtcToEstForDisplay = (utcTime: string) => {
-    const timeInUTC = new Date(`2023-01-01T${utcTime}:00Z`); // Example date, only time part is relevant
-    const timeInEST = utcToZonedTime(timeInUTC, "America/New_York");
-    return format(timeInEST, "hh:mm a"); // Format as per requirement
-  };
+  const [selected, setSelected] = useState(seats[0] ?? "12:00");
 
   const createQueryString = (name: string, value: string) => {
     setSelected(value);
@@ -51,13 +46,19 @@ export default function StartTimeSelection() {
     return params.toString();
   };
 
+  const handleTimeChange = (newTime: string) => {
+    router.push(pathname + "?" + createQueryString("startTime", newTime));
+  };
+
+  useEffect(() => {
+    handleTimeChange(selected);
+  }, []);
+
   return (
     <Listbox
       disabled={isDisabled}
       value={selected}
-      onChange={(newTime) => {
-        router.push(pathname + "?" + createQueryString("startTime", newTime));
-      }}
+      onChange={handleTimeChange}
     >
       {({ open }) => (
         <>
@@ -73,7 +74,9 @@ export default function StartTimeSelection() {
                   : "bg-gray-700 text-primary ring-gray-500 focus:outline-none focus:ring-2 focus:ring-highlight_hover",
               )}
             >
-              <span className="block truncate">{convertUtcToEstForDisplay(selected)}</span>
+              <span className="block truncate">
+                {convertUtcToEst(selected)}
+              </span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                 <ChevronUpDownIcon
                   className={classNames(
@@ -114,7 +117,7 @@ export default function StartTimeSelection() {
                             "block truncate",
                           )}
                         >
-                          {convertUtcToEstForDisplay(seat)}
+                          {convertUtcToEst(seat)}
                         </span>
 
                         {selected ? (
@@ -132,7 +135,6 @@ export default function StartTimeSelection() {
                   </Listbox.Option>
                 ))}
               </Listbox.Options>
-              
             </Transition>
           </div>
         </>
