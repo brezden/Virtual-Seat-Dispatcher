@@ -70,8 +70,10 @@ export default function TimeSelection() {
     
     const updateURLParams = () => {
         const params = new URLSearchParams(searchParams);
-        params.set("startTime", startTime);
-        params.set("endTime", endTime);
+        const cleanedStartTime = startTime.replace(/:/g, '');
+        const cleanedEndTime = endTime.replace(/:/g, '');
+        params.set("startTime", cleanedStartTime);
+        params.set("endTime", cleanedEndTime);
         router.push(`${pathname}?${params.toString()}`);
     };
     

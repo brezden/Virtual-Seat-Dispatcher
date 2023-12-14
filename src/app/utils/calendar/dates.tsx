@@ -149,44 +149,12 @@ export function formatDateString(inputDate: string): string {
   return `${months[monthIndex]} ${day}${suffixes[relevantSuffix]}, ${year}`;
 }
 
-export function createDateFromDateTime(date: string, startTime: string): Date {
-  // Regular expressions to extract date and time components
-  const dateRegex = /^(\d{4})-(\d{2})-(\d{2})$/;
-  const timeRegex = /^(\d{2})(\d{2})$/;
-
-  // Extracting and validating the date components
-  const dateMatch = date.match(dateRegex);
-  if (!dateMatch) {
-    throw new Error("Invalid date format. Expected format: YYYY-MM-DD");
-  }
-  const yearStr = dateMatch[1];
-  const monthStr = dateMatch[2];
-  const dayStr = dateMatch[3];
-
-  // Extracting and validating the time components
-  const timeMatch = startTime.match(timeRegex);
-  if (!timeMatch) {
-    throw new Error("Invalid time format. Expected format: HHMM");
-  }
-  const hoursStr = timeMatch[1];
-  const minutesStr = timeMatch[2];
-
-  // Validating that all components are defined
-  if (!yearStr || !monthStr || !dayStr || !hoursStr || !minutesStr) {
-    throw new Error("Date or time component is missing");
-  }
-
-  // Parsing the components into numbers
-  const year = parseInt(yearStr, 10);
-  const month = parseInt(monthStr, 10) - 1; // Month is 0-indexed in JavaScript
-  const day = parseInt(dayStr, 10);
-  const hours = parseInt(hoursStr, 10);
-  const minutes = parseInt(minutesStr, 10);
-
-  // Create a UTC date object and then adjust for EST time zone
-  // Assuming EST is UTC-5 (adjust accordingly for daylight saving time if needed)
-  const utcDate = new Date(Date.UTC(year, month, day, hours + 5, minutes));
-  return utcDate;
+export function createDateFromDateTime(dateStr: string, timeStr: string): Date {
+    // Format time string into HH:MM format
+    const formattedTime = timeStr.slice(0, 2) + ':' + timeStr.slice(2);
+    const dateTimeStr = `${dateStr}T${formattedTime}:00`;
+    const date = new Date(dateTimeStr + 'Z');
+    return date;
 }
 
 export function convertUtcToEst(time: string): string {
@@ -222,4 +190,25 @@ export function isEarlier(time1: string, time2: string): boolean {
   const minutes1 = toMinutes(time1);
   const minutes2 = toMinutes(time2);
   return minutes1 < minutes2;
+}
+
+export function formatTimesToEST(startTime: string, endTime: string): string {
+  console.log(startTime, endTime)
+  // Convert the ISO strings to Date objects
+  const startDate = new Date(startTime);
+  const endDate = new Date(endTime);
+
+  // Options for toLocaleTimeString to format time in 12-hour format with AM/PM
+  const options: Intl.DateTimeFormatOptions = {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+      timeZone: 'America/New_York' // EST time zone
+  };
+
+  // Format times to EST
+  const formattedStartTime = startDate.toLocaleTimeString('en-US', options);
+  const formattedEndTime = endDate.toLocaleTimeString('en-US', options);
+
+  return `${formattedStartTime} - ${formattedEndTime}`;
 }

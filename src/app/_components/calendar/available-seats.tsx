@@ -2,8 +2,6 @@
 
 import DeskSelection from "./desk-selection";
 import AllDayToggle from "../buttons/all-day-toggle";
-import StartTimeSelection from "./start-time-selection";
-import EndTimeSelection from "./end-time-selection";
 import { useSession } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation";
 import { api } from "~/trpc/react";
@@ -57,8 +55,6 @@ export default function AvailableMembers() {
       <DeskSelection />
       <div className="grid grid-cols-3 lg:gap-x-3 justify-center">
         <TimeSelection />
-        {/* <StartTimeSelection/>
-        <EndTimeSelection /> */}
         <AllDayToggle />
       </div>
       <div className="pt-3">
