@@ -183,6 +183,8 @@ export function createDateFromDateTime(date: string, startTime: string): Date {
   const hours = parseInt(hoursStr, 10);
   const minutes = parseInt(minutesStr, 10);
 
-  // Creating the date object
-  return new Date(year, month, day, hours, minutes);
+  // Create a UTC date object and then adjust for EST time zone
+  // Assuming EST is UTC-5 (adjust accordingly for daylight saving time if needed)
+  const utcDate = new Date(Date.UTC(year, month, day, hours + 5, minutes));
+  return utcDate;
 }

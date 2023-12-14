@@ -28,6 +28,8 @@
     "@trpc/react-query": "^10.43.6",
     "@trpc/server": "^10.43.6",
     "@vercel/blob": "^0.15.1",
+    "date-fns": "^2.30.0",
+    "date-fns-tz": "^2.0.0",
     "heroicons": "^2.0.18",
     "next": "^14.0.3",
     "next-auth": "^4.24.5",

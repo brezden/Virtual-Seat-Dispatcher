@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation";
 import { api } from "~/trpc/react";
 import { createDateFromDateTime } from "../../utils/calendar/dates";
-import { Booking } from "../../types/meeting";
+import type { Booking } from "../../types/meeting";
 
 export default function AvailableMembers() {
   const router = useRouter()
@@ -44,7 +44,8 @@ export default function AvailableMembers() {
       bookingData.endDate = createDateFromDateTime(date!, endTime!);
       delete bookingData.allDay; // Remove allDay field for non-all-day bookings
     }
-  
+    
+    console.log(bookingData)
     // Execute the mutate call with the prepared booking data
     bookSeat.mutate(bookingData);
   }

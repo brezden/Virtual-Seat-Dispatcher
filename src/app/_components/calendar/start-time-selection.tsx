@@ -4,19 +4,45 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { classNames } from "../../utils/classNames";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-
-const seats = ["0930", "0945"];
+import { utcToZonedTime } from "date-fns-tz";
+import { addMinutes, format } from "date-fns";
 
 export default function StartTimeSelection() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams()!;
   const [selected, setSelected] = useState("0930");
-  const [isDisabled, setIsDisabled] = useState(searchParams.get("allDayStatus") === "true");
+  const [isDisabled, setIsDisabled] = useState(
+    searchParams.get("allDayStatus") === "true",
+  );
 
   useEffect(() => {
     setIsDisabled(searchParams.get("allDayStatus") === "true");
   }, [searchParams]);
+
+  const generateTimeSlots = () => {
+    const startEST = new Date();
+    startEST.setUTCHours(12, 0, 0, 0); // 7am EST is 12pm UTC
+    const endEST = new Date();
+    endEST.setUTCHours(23, 0, 0, 0); // 6pm EST is 11pm UTC
+
+    let currentTime = startEST;
+    const timeSlots = [];
+    while (currentTime <= endEST) {
+      timeSlots.push(currentTime.toISOString().substring(11, 16)); // Store only the time part
+      currentTime = addMinutes(currentTime, 15); // Increment by 15 minutes
+    }
+    return timeSlots;
+  };
+
+  // Initial seats are now generated from the function
+  const [seats, setSeats] = useState(generateTimeSlots());
+
+  const convertUtcToEstForDisplay = (utcTime: string) => {
+    const timeInUTC = new Date(`2023-01-01T${utcTime}:00Z`); // Example date, only time part is relevant
+    const timeInEST = utcToZonedTime(timeInUTC, "America/New_York");
+    return format(timeInEST, "hh:mm a"); // Format as per requirement
+  };
 
   const createQueryString = (name: string, value: string) => {
     setSelected(value);
@@ -47,7 +73,7 @@ export default function StartTimeSelection() {
                   : "bg-gray-700 text-primary ring-gray-500 focus:outline-none focus:ring-2 focus:ring-highlight_hover",
               )}
             >
-              <span className="block truncate">{selected}</span>
+              <span className="block truncate">{convertUtcToEstForDisplay(selected)}</span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                 <ChevronUpDownIcon
                   className={classNames(
@@ -88,7 +114,7 @@ export default function StartTimeSelection() {
                             "block truncate",
                           )}
                         >
-                          {seat}
+                          {convertUtcToEstForDisplay(seat)}
                         </span>
 
                         {selected ? (
@@ -106,6 +132,7 @@ export default function StartTimeSelection() {
                   </Listbox.Option>
                 ))}
               </Listbox.Options>
+              
             </Transition>
           </div>
         </>
