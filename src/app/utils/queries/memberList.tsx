@@ -14,8 +14,6 @@ export async function fetchBookingsOnDate(
   const startDate = new Date(date);
   const endDate = new Date(startDate);
   endDate.setDate(startDate.getDate() + 1); // Move to the next day
-
-  console.log(startDate, endDate, "sdfjsdjf")
   const bookings = await prisma.booking.findMany({
     where: {
       startDate: {

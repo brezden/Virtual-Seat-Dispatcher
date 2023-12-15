@@ -1,48 +1,73 @@
-"use client"
+"use client";
 
 import DeskSelection from "./desk-selection";
 import AllDayToggle from "../buttons/all-day-toggle";
-import { useSession } from "next-auth/react"
+import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { api } from "~/trpc/react";
-import { createDateFromDateTime } from "../../utils/calendar/dates";
+import { createDateFromDateTime, formatBookingDetails } from "../../utils/calendar/dates";
 import type { Booking } from "../../types/meeting";
 import TimeSelection from "./time-selection";
+import { useEffect, useState } from "react";
+import {SuccessNotification} from "../notifications/success";
+import { ErrorNotification } from "../notifications/error";
 
 export default function AvailableMembers() {
-  const router = useRouter()
+  const [isBooking, setIsBooking] = useState(false);
+  const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+  const [showErrorNotification, setShowErrorNotification] = useState(false);
+  const [errorTrigger, setErrorTrigger] = useState(0);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const { data: session } = useSession()
+  const { data: session } = useSession();
   const userEmail = session?.user?.email;
-  const bookSeat = api.meeting.createSeat.useMutation(
-    {
-      onSuccess: () => {
-        router.refresh();
-      }
+  const bookSeat = api.meeting.createSeat.useMutation({
+    onSuccess: () => {
+      router.refresh();
+    },
+  });
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    if (showSuccessNotification) {
+      timer = setTimeout(() => {
+        setShowSuccessNotification(false);
+      }, 9000);
     }
-  )
+    return () => clearTimeout(timer);
+  }, [showSuccessNotification]);
+
+  function handleBookingError(errorMsg: string) {
+    setIsBooking(false);
+    setErrorMessage(errorMsg); // Set the error message
+    setShowErrorNotification(true); // Show the error notification
+    setErrorTrigger(prev => prev + 1);
+  }
 
   function addBooking() {
+    setIsBooking(true);
     let date = searchParams.get("date");
     const allDayStatus = searchParams.get("allDayStatus");
     const startTime = searchParams.get("startTime");
     const location = searchParams.get("deskid");
 
     if (!location) {
-      console.error("Error: Please select a desk");
+      handleBookingError("Please select a desk to proceed with the booking.");
       return;
     }
-  
+
     // If date is null, set it to the current date in EST
     if (!date) {
       const now = new Date();
 
       // Convert UTC to EST (UTC-5)
-      const estTime = new Date(now.getTime() - (5 * 60 * 60 * 1000));
-  
+      const estTime = new Date(now.getTime() - 5 * 60 * 60 * 1000);
+
       // Set to midnight in EST
       estTime.setHours(0, 0, 0, 0);
-  
+
       date = estTime.toISOString().split("T")[0]!;
     }
 
@@ -52,9 +77,9 @@ export default function AvailableMembers() {
       startDate: new Date(`${date}T00:00:00Z`), // Treats date as UTC
       allDay: allDayStatus === "true",
       location: parseInt(location, 10), // Assuming `location` is a string
-      guests: false
+      guests: false,
     };
-  
+
     // Modify booking data based on allDayStatus
     if (bookingData.allDay === false) {
       const endTime = searchParams.get("endTime");
@@ -63,29 +88,55 @@ export default function AvailableMembers() {
       delete bookingData.allDay; // Remove allDay field for non-all-day bookings
     }
 
+    setSuccessMessage(formatBookingDetails(bookingData))
+    console.log(bookingData)
+    // setSuccessMessage
+
     // Execute the mutate call with the prepared booking data
-    bookSeat.mutate(bookingData);
+    bookSeat.mutate(bookingData, {
+      onSuccess: () => {
+        setShowSuccessNotification(true);
+        setIsBooking(false);
+      },
+      onError: () => {
+        handleBookingError("An error occurred while booking the seat.");
+        setIsBooking(false);
+      },
+    });
   }
-  
 
   return (
-    <div className="flex flex-col gap-5 justify-center pt-4">
+    <div className="flex flex-col justify-center gap-5 pt-4">
       <DeskSelection />
-      <div className="grid grid-cols-3 lg:gap-x-3 justify-center">
+      <div className="grid grid-cols-3 justify-center lg:gap-x-3">
         <TimeSelection />
         <AllDayToggle />
       </div>
       <div className="pt-3">
-          <button
-            type="button"
-            className="w-full rounded-md bg-highlight px-3 py-3 text-lg font-semibold text-white shadow transition duration-300 ease-in-out hover:bg-highlight_hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-highlight_hover"
-            onClick={() => {
-              addBooking()
-            }}
-            >
-            Book Seat
-          </button>
+        <button
+          type="button"
+          className={`w-full rounded-md px-3 py-3 text-lg font-semibold shadow transition duration-300 ease-in-out
+    ${
+      isBooking
+        ? "cursor-not-allowed bg-gray-400 text-gray-700" // Styles for disabled state
+        : "bg-highlight text-white hover:bg-highlight_hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-highlight_hover"
+    }`}
+          onClick={() => {
+            if (!isBooking) {
+              addBooking();
+            }
+          }}
+          disabled={isBooking}
+        >
+          Book Seat
+        </button>
+        <div className="pt-3">
+          {showSuccessNotification && <SuccessNotification message={successMessage}/>}
         </div>
+        <div className="pt-3">
+          {showErrorNotification && <ErrorNotification message={errorMessage} trigger={errorTrigger} />}
+        </div>
+      </div>
     </div>
   );
 }

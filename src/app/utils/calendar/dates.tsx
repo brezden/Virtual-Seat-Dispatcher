@@ -1,4 +1,5 @@
 import type { Day } from "~/app/types/calendar";
+import type { Booking } from "~/app/types/meeting";
 
 export function getCurrentDateInEST() {
   const now = new Date();
@@ -193,7 +194,6 @@ export function isEarlier(time1: string, time2: string): boolean {
 }
 
 export function formatTimesToEST(startTime: string, endTime: string): string {
-  console.log(startTime, endTime)
   // Convert the ISO strings to Date objects
   const startDate = new Date(startTime);
   const endDate = new Date(endTime);
@@ -211,4 +211,18 @@ export function formatTimesToEST(startTime: string, endTime: string): string {
   const formattedEndTime = endDate.toLocaleTimeString('en-US', options);
 
   return `${formattedStartTime} - ${formattedEndTime}`;
+}
+
+export function formatBookingDetails(booking: Booking): string {
+  const dateOptions: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', timeZone: 'UTC' };
+  const timeOptions: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: 'numeric', timeZone: 'America/New_York' };
+
+  if (booking.allDay ?? !booking.endDate) {
+      const date = booking.startDate.toLocaleDateString('en-US', dateOptions);
+      return `Booked All Day for ${date} at Desk ${booking.location}`;
+  } else {
+      const startDate = booking.startDate.toLocaleDateString('en-US', dateOptions) + ' ' + booking.startDate.toLocaleTimeString('en-US', timeOptions);
+      const endTime = booking.endDate.toLocaleTimeString('en-US', timeOptions);
+      return `You booked on ${startDate} to ${endTime} at Desk ${booking.location}`;
+  }
 }
