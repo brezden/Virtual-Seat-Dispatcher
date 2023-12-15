@@ -89,8 +89,6 @@ export default function AvailableMembers() {
     }
 
     setSuccessMessage(formatBookingDetails(bookingData))
-    console.log(bookingData)
-    // setSuccessMessage
 
     // Execute the mutate call with the prepared booking data
     bookSeat.mutate(bookingData, {

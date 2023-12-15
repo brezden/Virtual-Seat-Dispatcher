@@ -2,11 +2,11 @@ import { z } from "zod";
 
 import {
   createTRPCRouter,
-  publicProcedure,
+  protectedProcedure,
 } from "~/server/api/trpc";
 
 export const meetingRouter = createTRPCRouter({
-  getMeeting: publicProcedure
+  testProtectedRoutes: protectedProcedure
     .input(z.object({ text: z.string() }))
     .query(({ input }) => {
       return {
@@ -14,7 +14,7 @@ export const meetingRouter = createTRPCRouter({
       };
     }),
 
-  createSeat: publicProcedure
+  createSeat: protectedProcedure
   .input(z.object({ userEmail: z.string().min(1), startDate: z.date(), endDate: z.date().optional(), allDay: z.boolean().optional(), location: z.number(), guests: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
       return ctx.db.booking.create({
@@ -28,15 +28,4 @@ export const meetingRouter = createTRPCRouter({
         },
       });
     }),
-
-  // getLatest: protectedProcedure.query(({ ctx }) => {
-  //   return ctx.db.post.findFirst({
-  //     orderBy: { createdAt: "desc" },
-  //     where: { createdBy: { id: ctx.session.user.id } },
-  //   });
-  // }),
-
-  // getSecretMessage: protectedProcedure.query(() => {
-  //   return "you can now see this secret message!";
-  // }),
 });
