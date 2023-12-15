@@ -2,6 +2,7 @@ import { CalendarIcon, MapPinIcon } from "@heroicons/react/20/solid";
 import { fetchBookingsOnDate } from "~/app/utils/queries/memberList";
 import MapViewToggle  from "~/app/_components/buttons/map-view-toggle";
 import Image from "next/image";
+import { formatTimesToEST } from "~/app/utils/calendar/dates";
 
 export default async function BookedMembers({
   searchParams,
@@ -52,7 +53,7 @@ export default async function BookedMembers({
                       {meeting.allDay ? (
                         <dd className="text-sm lg:text-lg">All Day</dd>
                       ) : (
-                        <dd className="text-sm lg:text-lg">{meeting.enddate}</dd>
+                        <dd className="text-sm lg:text-lg">{formatTimesToEST(meeting.date, meeting.enddate!)}</dd>
                       )}
                     </div>
                     <div className="mt-2 flex items-start space-x-3 ">

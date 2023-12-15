@@ -2,13 +2,12 @@
 
 import DeskSelection from "./desk-selection";
 import AllDayToggle from "../buttons/all-day-toggle";
-import StartTimeSelection from "./start-time-selection";
-import EndTimeSelection from "./end-time-selection";
 import { useSession } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation";
 import { api } from "~/trpc/react";
 import { createDateFromDateTime } from "../../utils/calendar/dates";
-import { Booking } from "../../types/meeting";
+import type { Booking } from "../../types/meeting";
+import TimeSelection from "./time-selection";
 
 export default function AvailableMembers() {
   const router = useRouter()
@@ -24,27 +23,46 @@ export default function AvailableMembers() {
   )
 
   function addBooking() {
-    const date = searchParams.get("date");
+    let date = searchParams.get("date");
     const allDayStatus = searchParams.get("allDayStatus");
     const startTime = searchParams.get("startTime");
+    const location = searchParams.get("deskid");
+
+    if (!location) {
+      console.error("Error: Please select a desk");
+      return;
+    }
   
+    // If date is null, set it to the current date in EST
+    if (!date) {
+      const now = new Date();
+
+      // Convert UTC to EST (UTC-5)
+      const estTime = new Date(now.getTime() - (5 * 60 * 60 * 1000));
+  
+      // Set to midnight in EST
+      estTime.setHours(0, 0, 0, 0);
+  
+      date = estTime.toISOString().split("T")[0]!;
+    }
+
     // Prepare common booking data
     const bookingData: Booking = {
       userEmail: userEmail ?? "",
-      startDate: new Date(date!),
+      startDate: new Date(`${date}T00:00:00Z`), // Treats date as UTC
       allDay: allDayStatus === "true",
-      location: 1,
+      location: parseInt(location, 10), // Assuming `location` is a string
       guests: false
     };
   
     // Modify booking data based on allDayStatus
-    if (allDayStatus === "false") {
+    if (bookingData.allDay === false) {
       const endTime = searchParams.get("endTime");
-      bookingData.startDate = createDateFromDateTime(date!, startTime!);
-      bookingData.endDate = createDateFromDateTime(date!, endTime!);
+      bookingData.startDate = createDateFromDateTime(date, startTime!);
+      bookingData.endDate = createDateFromDateTime(date, endTime!);
       delete bookingData.allDay; // Remove allDay field for non-all-day bookings
     }
-  
+
     // Execute the mutate call with the prepared booking data
     bookSeat.mutate(bookingData);
   }
@@ -54,8 +72,7 @@ export default function AvailableMembers() {
     <div className="flex flex-col gap-5 justify-center pt-4">
       <DeskSelection />
       <div className="grid grid-cols-3 lg:gap-x-3 justify-center">
-        <StartTimeSelection/>
-        <EndTimeSelection />
+        <TimeSelection />
         <AllDayToggle />
       </div>
       <div className="pt-3">
