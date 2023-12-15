@@ -23,31 +23,57 @@ export default function AvailableMembers() {
   )
 
   function addBooking() {
-    const date = searchParams.get("date");
+    let date = searchParams.get("date");
     const allDayStatus = searchParams.get("allDayStatus");
     const startTime = searchParams.get("startTime");
+    const location = searchParams.get("deskid");
+  
+    console.log(date, startTime, location);
+  
+    if (!location) {
+      console.error("Error: Please select a desk");
+      return;
+    }
+  
+    // If date is null, set it to the current date in EST
+    if (!date) {
+      const currentDate = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
+      date = new Date(currentDate).toISOString().split('T')[0];
+    }
+  
+    let startDateUTC;
+    // Modify startDate based on allDayStatus
+    if (allDayStatus === "true") {
+      startDateUTC = new Date(`${date}T00:00:00Z`);
+    } else {
+      // Assuming startTime is in HHMM format
+      const formattedTime = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}:00.000`;
+      startDateUTC = new Date(`${date}T${formattedTime}Z`);
+    }
   
     // Prepare common booking data
-    const bookingData: Booking = {
+    const bookingData = {
       userEmail: userEmail ?? "",
-      startDate: new Date(date!),
+      startDate: startDateUTC,
       allDay: allDayStatus === "true",
-      location: 1,
+      location: parseInt(location, 10),
       guests: false
     };
   
     // Modify booking data based on allDayStatus
     if (allDayStatus === "false") {
       const endTime = searchParams.get("endTime");
-      bookingData.startDate = createDateFromDateTime(date!, startTime!);
-      bookingData.endDate = createDateFromDateTime(date!, endTime!);
+      // Ensure endDate is also set in UTC
+      const formattedEndTime = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}:00.000`;
+      bookingData.endDate = new Date(`${date}T${formattedEndTime}Z`);
       delete bookingData.allDay; // Remove allDay field for non-all-day bookings
     }
-    
-    console.log(bookingData)
+  
+    console.log(bookingData);
     // Execute the mutate call with the prepared booking data
     bookSeat.mutate(bookingData);
   }
+  
   
 
   return (

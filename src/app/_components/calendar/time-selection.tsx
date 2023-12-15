@@ -14,7 +14,6 @@ export default function TimeSelection() {
   const [isDisabled, setIsDisabled] = useState(
     searchParams.get("allDayStatus") === "true",
   );
-
   
   // Generate Start Time Slots
   const generateStartSlots = () => {
