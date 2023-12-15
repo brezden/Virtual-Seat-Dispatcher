@@ -1,5 +1,6 @@
 import BookProfile from "./navigationProfile";
 import { classNames } from "../../utils/classNames";
+import SignOutButton from "../buttons/sign-out";
 
 const navigation = [
   { name: "Book", href: "/book", current: true },
@@ -34,6 +35,7 @@ export default function NavigationBar() {
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             <BookProfile />
+            <SignOutButton />
           </div>
         </div>
       </div>
