@@ -1,7 +1,5 @@
-import { CalendarIcon, MapPinIcon } from "@heroicons/react/20/solid";
 import { fetchBookingsOnDate } from "~/app/utils/queries/memberList";
 import MapViewToggle  from "~/app/_components/buttons/map-view-toggle";
-import Image from "next/image";
 
 export default async function BookedMembers({
   searchParams,
@@ -10,7 +8,6 @@ export default async function BookedMembers({
 }) {
   const currentDate = searchParams.date as string;
   const meetings = await fetchBookingsOnDate(currentDate);
-  const isSingleRow = meetings.length == 1; // Check if the last row has a single item
 
   return (
     <div className="justify-center">

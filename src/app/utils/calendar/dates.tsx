@@ -1,4 +1,5 @@
 import type { Day } from "~/app/types/calendar";
+import type { Booking } from "~/app/types/meeting";
 
 export function getCurrentDateInEST() {
   const now = new Date();
@@ -149,40 +150,79 @@ export function formatDateString(inputDate: string): string {
   return `${months[monthIndex]} ${day}${suffixes[relevantSuffix]}, ${year}`;
 }
 
-export function createDateFromDateTime(date: string, startTime: string): Date {
-  // Regular expressions to extract date and time components
-  const dateRegex = /^(\d{4})-(\d{2})-(\d{2})$/;
-  const timeRegex = /^(\d{2})(\d{2})$/;
+export function createDateFromDateTime(dateStr: string, timeStr: string): Date {
+    // Format time string into HH:MM format
+    const formattedTime = timeStr.slice(0, 2) + ':' + timeStr.slice(2);
+    const dateTimeStr = `${dateStr}T${formattedTime}:00`;
+    const date = new Date(dateTimeStr + 'Z');
+    return date;
+}
 
-  // Extracting and validating the date components
-  const dateMatch = date.match(dateRegex);
-  if (!dateMatch) {
-    throw new Error("Invalid date format. Expected format: YYYY-MM-DD");
+export function convertUtcToEst(time: string): string {
+  // Parse the time as UTC
+  const utcDate = new Date(`1970-01-01T${time}:00Z`);
+
+  // Convert UTC to EST (UTC-5)
+  const estOffset = 5 * 60 * 60 * 1000; // 5 hours in milliseconds
+  const estDate = new Date(utcDate.getTime() - estOffset);
+
+  // Convert to 12-hour format
+  let hours = estDate.getUTCHours();
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+
+  // Format the time
+  const formattedHours = hours.toString().padStart(2, '0');
+  const minutes = estDate.getUTCMinutes().toString().padStart(2, '0');
+
+  return `${formattedHours}:${minutes} ${ampm}`;
+}
+
+export function isEarlier(time1: string, time2: string): boolean {
+  // Helper function to convert time string to minutes since midnight
+  const toMinutes = (time: string): number => {
+      const [hours, minutes] = time.split(":").map(Number);
+      if (hours !== undefined && minutes !== undefined) return hours * 60 + minutes;
+      return 0;
+  };
+
+  // Convert each time to minutes since midnight and compare
+  const minutes1 = toMinutes(time1);
+  const minutes2 = toMinutes(time2);
+  return minutes1 < minutes2;
+}
+
+export function formatTimesToEST(startTime: string, endTime: string): string {
+  // Convert the ISO strings to Date objects
+  const startDate = new Date(startTime);
+  const endDate = new Date(endTime);
+
+  // Options for toLocaleTimeString to format time in 12-hour format with AM/PM
+  const options: Intl.DateTimeFormatOptions = {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+      timeZone: 'America/New_York' // EST time zone
+  };
+
+  // Format times to EST
+  const formattedStartTime = startDate.toLocaleTimeString('en-US', options);
+  const formattedEndTime = endDate.toLocaleTimeString('en-US', options);
+
+  return `${formattedStartTime} - ${formattedEndTime}`;
+}
+
+export function formatBookingDetails(booking: Booking): string {
+  const dateOptions: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', timeZone: 'UTC' };
+  const timeOptions: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: 'numeric', timeZone: 'America/New_York' };
+
+  if (booking.allDay ?? !booking.endDate) {
+      const date = booking.startDate.toLocaleDateString('en-US', dateOptions);
+      return `Booked All Day for ${date} at Desk ${booking.location}`;
+  } else {
+      const startDate = booking.startDate.toLocaleDateString('en-US', dateOptions) + ' ' + booking.startDate.toLocaleTimeString('en-US', timeOptions);
+      const endTime = booking.endDate.toLocaleTimeString('en-US', timeOptions);
+      return `You booked on ${startDate} to ${endTime} at Desk ${booking.location}`;
   }
-  const yearStr = dateMatch[1];
-  const monthStr = dateMatch[2];
-  const dayStr = dateMatch[3];
-
-  // Extracting and validating the time components
-  const timeMatch = startTime.match(timeRegex);
-  if (!timeMatch) {
-    throw new Error("Invalid time format. Expected format: HHMM");
-  }
-  const hoursStr = timeMatch[1];
-  const minutesStr = timeMatch[2];
-
-  // Validating that all components are defined
-  if (!yearStr || !monthStr || !dayStr || !hoursStr || !minutesStr) {
-    throw new Error("Date or time component is missing");
-  }
-
-  // Parsing the components into numbers
-  const year = parseInt(yearStr, 10);
-  const month = parseInt(monthStr, 10) - 1; // Month is 0-indexed in JavaScript
-  const day = parseInt(dayStr, 10);
-  const hours = parseInt(hoursStr, 10);
-  const minutes = parseInt(minutesStr, 10);
-
-  // Creating the date object
-  return new Date(year, month, day, hours, minutes);
 }
