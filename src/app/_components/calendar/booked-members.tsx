@@ -11,7 +11,6 @@ export default async function BookedMembers({
 }) {
   const currentDate = searchParams.date as string;
   const meetings = await fetchBookingsOnDate(currentDate);
-  console.log(meetings)
   const isSingleRow = meetings.length == 1; // Check if the last row has a single item
 
   return (

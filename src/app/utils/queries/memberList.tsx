@@ -11,17 +11,16 @@ export async function fetchBookingsOnDate(
     date = getCurrentDateESTStringDash();
   }
 
-  // Convert date to EST and find start of the day in EST, then convert to UTC
-  const startDateEST = new Date(`${date}T00:00:00-05:00`); // Assuming EST is UTC-5
-  const endDateEST = new Date(startDateEST);
-  endDateEST.setDate(startDateEST.getDate() + 1); // Move to the next day
-  console.log(startDateEST, endDateEST)
+  const startDate = new Date(date);
+  const endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + 1); // Move to the next day
 
+  console.log(startDate, endDate, "sdfjsdjf")
   const bookings = await prisma.booking.findMany({
     where: {
       startDate: {
-        gte: startDateEST,
-        lt: endDateEST, // 'lt' for less than (before the start of the next day)
+        gte: startDate,
+        lt: endDate, // 'lt' for less than (before the start of the next day)
       },
     },
     include: {

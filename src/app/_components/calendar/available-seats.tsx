@@ -27,9 +27,7 @@ export default function AvailableMembers() {
     const allDayStatus = searchParams.get("allDayStatus");
     const startTime = searchParams.get("startTime");
     const location = searchParams.get("deskid");
-  
-    console.log(date, startTime, location);
-  
+
     if (!location) {
       console.error("Error: Please select a desk");
       return;
@@ -37,43 +35,37 @@ export default function AvailableMembers() {
   
     // If date is null, set it to the current date in EST
     if (!date) {
-      const currentDate = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
-      date = new Date(currentDate).toISOString().split('T')[0];
-    }
+      const now = new Date();
+
+      // Convert UTC to EST (UTC-5)
+      const estTime = new Date(now.getTime() - (5 * 60 * 60 * 1000));
   
-    let startDateUTC;
-    // Modify startDate based on allDayStatus
-    if (allDayStatus === "true") {
-      startDateUTC = new Date(`${date}T00:00:00Z`);
-    } else {
-      // Assuming startTime is in HHMM format
-      const formattedTime = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}:00.000`;
-      startDateUTC = new Date(`${date}T${formattedTime}Z`);
-    }
+      // Set to midnight in EST
+      estTime.setHours(0, 0, 0, 0);
   
+      date = estTime.toISOString().split("T")[0]!;
+    }
+
     // Prepare common booking data
-    const bookingData = {
+    const bookingData: Booking = {
       userEmail: userEmail ?? "",
-      startDate: startDateUTC,
+      startDate: new Date(`${date}T00:00:00Z`), // Treats date as UTC
       allDay: allDayStatus === "true",
-      location: parseInt(location, 10),
+      location: parseInt(location, 10), // Assuming `location` is a string
       guests: false
     };
   
     // Modify booking data based on allDayStatus
-    if (allDayStatus === "false") {
+    if (bookingData.allDay === false) {
       const endTime = searchParams.get("endTime");
-      // Ensure endDate is also set in UTC
-      const formattedEndTime = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}:00.000`;
-      bookingData.endDate = new Date(`${date}T${formattedEndTime}Z`);
+      bookingData.startDate = createDateFromDateTime(date, startTime!);
+      bookingData.endDate = createDateFromDateTime(date, endTime!);
       delete bookingData.allDay; // Remove allDay field for non-all-day bookings
     }
-  
-    console.log(bookingData);
+
     // Execute the mutate call with the prepared booking data
     bookSeat.mutate(bookingData);
   }
-  
   
 
   return (
