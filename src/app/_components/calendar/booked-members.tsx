@@ -1,13 +1,11 @@
-import { fetchBookingsOnDate } from "~/app/utils/queries/memberList";
 import MapViewToggle  from "~/app/_components/buttons/map-view-toggle";
+import type { BookingData } from "~/app/types/meeting";
 
-export default async function BookedMembers({
-  searchParams,
-}: {
-  searchParams: Record<string, string | string[] | undefined>;
-}) {
-  const currentDate = searchParams.date as string;
-  const meetings = await fetchBookingsOnDate(currentDate);
+interface BookedMembersProps {
+  meetings: BookingData[];
+}
+
+export default async function BookedMembers({ meetings }: BookedMembersProps) {
 
   return (
     <div className="justify-center">

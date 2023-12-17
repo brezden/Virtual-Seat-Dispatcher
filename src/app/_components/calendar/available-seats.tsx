@@ -6,13 +6,18 @@ import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { api } from "~/trpc/react";
 import { createDateFromDateTime, formatBookingDetails } from "../../utils/calendar/dates";
-import type { Booking } from "../../types/meeting";
+import { deskAvailable } from "../../utils/booking/booking";
+import type { Booking, BookingData } from "../../types/meeting";
 import TimeSelection from "./time-selection";
 import { useEffect, useState } from "react";
 import {SuccessNotification} from "../notifications/success";
 import { ErrorNotification } from "../notifications/error";
 
-export default function AvailableMembers() {
+interface BookedMembersProps {
+  meetings: BookingData[];
+}
+
+export default function AvailableMembers({ meetings }: BookedMembersProps) {
   const [isBooking, setIsBooking] = useState(false);
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [showErrorNotification, setShowErrorNotification] = useState(false);
@@ -28,6 +33,7 @@ export default function AvailableMembers() {
       router.refresh();
     },
   });
+  const deskBookedList = deskAvailable(meetings);
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
@@ -103,9 +109,13 @@ export default function AvailableMembers() {
     });
   }
 
+
+
+  console.log(meetings)
+
   return (
     <div className="flex flex-col justify-center gap-5 pt-4">
-      <DeskSelection />
+      <DeskSelection fullDesks={deskBookedList}/>
       <div className="grid grid-cols-3 justify-center lg:gap-x-3">
         <TimeSelection />
         <AllDayToggle />

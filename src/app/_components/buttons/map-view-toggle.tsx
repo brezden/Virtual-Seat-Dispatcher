@@ -99,7 +99,7 @@ export default function MapViewToggle({ meetings }: MapViewToggleProps) {
                               />
                             </dt>
                             <dd className="text-sm lg:text-lg">
-                              {meeting.location}
+                              Desk {meeting.location}
                             </dd>
                           </div>
                         </dl>
