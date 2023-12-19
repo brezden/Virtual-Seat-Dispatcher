@@ -7,7 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { addMinutes } from "date-fns";
 import { convertUtcToEst, isEarlier } from "../../utils/calendar/dates";
 
-export default function TimeSelection({ timeSlots }: { timeSlots: number[] }) {
+export default function TimeSelection({ timeSlots }: { timeSlots: string[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams()!;

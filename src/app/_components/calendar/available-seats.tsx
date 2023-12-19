@@ -33,8 +33,10 @@ export default function AvailableMembers({ meetings }: BookedMembersProps) {
       router.refresh();
     },
   });
+
+  const currentDesk = searchParams.get("deskid") ?? "";
   const deskBookedList = deskAvailable(meetings);
-  const availableTimes = availableTimeSlots(meetings);
+  const availableTimes = availableTimeSlots(meetings.filter(m => m.location === parseInt(currentDesk, 10)));
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
@@ -110,8 +112,6 @@ export default function AvailableMembers({ meetings }: BookedMembersProps) {
     });
   }
 
-  console.log(meetings)
-  console.log(availableTimes)
   return (
     <div className="flex flex-col justify-center gap-5 pt-4">
       <DeskSelection fullDesks={deskBookedList}/>
