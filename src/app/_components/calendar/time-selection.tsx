@@ -114,7 +114,6 @@ export default function TimeSelection({ timeSlots }: { timeSlots: string[] }) {
         setEndSeats(generateEndSlots());
     }, [timeSlots]);
 
-    // 
     useEffect(() => {
         if (!isEarlier(startTime, endTime)) setEndTime(endSeats[0]!);
     }, [endSeats]);    

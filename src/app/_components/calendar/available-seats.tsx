@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { api } from "~/trpc/react";
 import { createDateFromDateTime, formatBookingDetails } from "../../utils/calendar/dates";
-import { deskAvailable, availableTimeSlots } from "../../utils/booking/booking";
+import { deskAvailable, availableTimeSlots, bookingIsInvalid } from "../../utils/booking/booking";
 import type { Booking, BookingData } from "../../types/meeting";
 import TimeSelection from "./time-selection";
 import { useEffect, useState } from "react";
@@ -95,6 +95,11 @@ export default function AvailableMembers({ meetings }: BookedMembersProps) {
       bookingData.startDate = createDateFromDateTime(date, startTime!);
       bookingData.endDate = createDateFromDateTime(date, endTime!);
       delete bookingData.allDay; // Remove allDay field for non-all-day bookings
+    }
+
+    if (bookingIsInvalid(meetings, bookingData)) {
+      handleBookingError("Invalid booking data. Check you have not booked over an existing booking.");
+      return;
     }
 
     setSuccessMessage(formatBookingDetails(bookingData))

@@ -1,4 +1,4 @@
-import type { BookingData } from "~/app/types/meeting";
+import type { Booking, BookingData } from "~/app/types/meeting";
 import { addMinutes } from "date-fns";
 
 export function deskAvailable(bookings: BookingData[]): number[] {
@@ -46,4 +46,38 @@ function getTimeSlots(startDate?: string, endDate?: string): string[] {
         currentTime = addMinutes(currentTime, 15); // Increment by 15 minutes
     }
     return timeSlots;
+}
+
+export function bookingIsInvalid(bookingData: BookingData[], booking: Booking): boolean {
+  // Convert start date to Date object and determine the end date based on the allDay flag
+  console.log(bookingData)
+  const newBookingStart = booking.startDate;
+  const newBookingEnd = booking.allDay ? new Date(booking.startDate.setHours(23, 59, 59, 999)) : (booking.endDate ?? new Date(booking.startDate.setHours(23, 59, 59, 999)));
+
+  // Iterate through existing bookings to check for overlap
+  for (const existingBooking of bookingData) {
+    const existingStart = new Date(existingBooking.date);
+    const existingEnd = existingBooking.enddate ? new Date(existingBooking.enddate) : new Date(existingBooking.date).setHours(23, 59, 59, 999);
+
+    // Check if the locations are the same
+    if (booking.location === existingBooking.location) {
+        if (booking.allDay){
+            return true;
+        }
+
+        if (existingBooking.allDay) {
+            return true;
+        }
+      // Check for overlap in dates for all-day or specific time bookings
+        if (newBookingStart.toDateString() === existingStart.toDateString()) {
+          return true; // Overlap found
+        }
+      } else {
+        if ((newBookingStart < existingEnd) && (newBookingEnd > existingStart)) {
+          return true; // Overlap found
+        }
+    }
+  }
+
+  return false; // No overlap found
 }
