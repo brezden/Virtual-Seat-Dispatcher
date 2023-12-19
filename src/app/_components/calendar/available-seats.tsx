@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { api } from "~/trpc/react";
 import { createDateFromDateTime, formatBookingDetails } from "../../utils/calendar/dates";
-import { deskAvailable } from "../../utils/booking/booking";
+import { deskAvailable, availableTimeSlots } from "../../utils/booking/booking";
 import type { Booking, BookingData } from "../../types/meeting";
 import TimeSelection from "./time-selection";
 import { useEffect, useState } from "react";
@@ -34,6 +34,7 @@ export default function AvailableMembers({ meetings }: BookedMembersProps) {
     },
   });
   const deskBookedList = deskAvailable(meetings);
+  const availableTimes = availableTimeSlots(meetings);
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
@@ -109,15 +110,13 @@ export default function AvailableMembers({ meetings }: BookedMembersProps) {
     });
   }
 
-
-
   console.log(meetings)
-
+  console.log(availableTimes)
   return (
     <div className="flex flex-col justify-center gap-5 pt-4">
       <DeskSelection fullDesks={deskBookedList}/>
       <div className="grid grid-cols-3 justify-center lg:gap-x-3">
-        <TimeSelection />
+        <TimeSelection timeSlots={availableTimes} />
         <AllDayToggle />
       </div>
       <div className="pt-3">
