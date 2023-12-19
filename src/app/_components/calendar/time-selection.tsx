@@ -53,7 +53,7 @@ export default function TimeSelection({ timeSlots }: { timeSlots: string[] }) {
         return timeSlots;
     };
     
-    const [startSeats, setStartSeats] = useState(generateStartSlots());
+    const [startSeats, setStartSeats] = useState(timeSlots);
     const [endSeats, setEndSeats] = useState(generateEndSlots(startSeats[0]!));
     const [startTime, setStartTime] = useState(startSeats[0] ?? "12:00");
     const [endTime, setEndTime] = useState(endSeats[0] ?? "12:15");
@@ -85,6 +85,10 @@ export default function TimeSelection({ timeSlots }: { timeSlots: string[] }) {
     useEffect(() => {
       setIsDisabled(searchParams.get("allDayStatus") === "true");
     }, [searchParams]);
+
+    useEffect(() => {
+        setStartSeats(timeSlots);
+    }, [timeSlots]);
 
     // 
     useEffect(() => {
