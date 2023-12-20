@@ -32,7 +32,7 @@ export default function AllDayToggle() {
         checked={disabledValue}
         onChange={(newTime) => {
           router.push(
-            pathname + "?" + createQueryString("allDayStatus", String(newTime)),
+            pathname + "?" + createQueryString("allDayStatus", String(newTime)), { scroll: false }
           );
         }} // Convert boolean to string
         className={classNames(

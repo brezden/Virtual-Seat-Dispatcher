@@ -34,7 +34,7 @@ export async function fetchBookingsOnDate(
       date: booking.startDate.toISOString(),
       enddate: booking.endDate ? booking.endDate.toISOString() : null,
       allDay: booking.allDay ?? null,
-      location: `Desk ${booking.location}`,
+      location: booking.location,
     };
   });
 }

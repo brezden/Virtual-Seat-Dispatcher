@@ -5,7 +5,7 @@ export interface BookingData {
   date: string;
   enddate: string | null;
   allDay: boolean | null;
-  location: string;
+  location: number;
 }
 
 export interface Booking {

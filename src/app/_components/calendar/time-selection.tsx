@@ -7,7 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { addMinutes } from "date-fns";
 import { convertUtcToEst, isEarlier } from "../../utils/calendar/dates";
 
-export default function TimeSelection() {
+export default function TimeSelection({ timeSlots }: { timeSlots: string[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams()!;
@@ -30,37 +30,60 @@ export default function TimeSelection() {
         }
         return timeSlots;
     };
+
+    // Really struggling on how we can generate the end time slots so I'm just going to leave this here for now
+    // const generateEndSlots = () => {
+    //   const availableEndTimes = [];
+    //   const startTime = searchParams.get("startTime")!;
+    //   const parts = startTime.split(":");
+    //   const hours = parseInt(parts[0]!, 10);
+    //   const minutes = parseInt(parts[1]!, 10);
+
+    //   const startEST = new Date();
+    //   startEST.setUTCHours(hours, minutes, 0, 0);
+
+    //   const endEST = new Date();
+    //   endEST.setUTCHours(23, 0, 0, 0);
+
+    //   let currentTime = startEST;
+    //   while (currentTime <= endEST) {
+    //     currentTime = addMinutes(currentTime, 15);
+    //     if (!timeSlots.includes(currentTime.toISOString().substring(11, 16))) {
+    //         availableEndTimes.push(currentTime.toISOString().substring(11, 16));
+    //     } else {
+    //         break;
+    //     }
+    //   }
+    //   console.log(availableEndTimes);
+    //   return availableEndTimes;
+    // };
     
     // Generate End Time Slots
-    const generateEndSlots = (startTime: string) => {
-        const timeParts = startTime.split(":").map(Number);
-        const hours = timeParts[0];
-        const minutes = timeParts[1];
-        
-        const startEST = new Date();
-        startEST.setUTCHours(hours!, minutes, 0, 0);
-        startEST.setMinutes(startEST.getMinutes() + 15);
-        
-        const endEST = new Date();
-        endEST.setUTCHours(23, 0, 0, 0);
-        
-        let currentTime = startEST;
-        const timeSlots = [];
-        while (currentTime <= endEST) {
-            timeSlots.push(currentTime.toISOString().substring(11, 16));
-            currentTime = addMinutes(currentTime, 15);
-        }
-        return timeSlots;
+    const generateEndSlots = () => {
+      return timeSlots.map(time => {
+        // Split the time string into hours and minutes
+        const [hours, minutes] = time.split(':').map(Number);
+
+        // Create a date object (using any date, only time part is relevant)
+        const date = new Date();
+        date.setHours(hours!, minutes);
+
+        // Add 15 minutes
+        date.setMinutes(date.getMinutes() + 15);
+
+        // Format the date back to a string
+        return date.toTimeString().substring(0, 5);
+    });
     };
     
-    const [startSeats, setStartSeats] = useState(generateStartSlots());
-    const [endSeats, setEndSeats] = useState(generateEndSlots(startSeats[0]!));
+    const [startSeats, setStartSeats] = useState(timeSlots);
+    const [endSeats, setEndSeats] = useState(generateEndSlots());
     const [startTime, setStartTime] = useState(startSeats[0] ?? "12:00");
     const [endTime, setEndTime] = useState(endSeats[0] ?? "12:15");
     
     const handleStartTimeChange = (newTime: string) => {
         setStartTime(newTime);
-        setEndSeats(generateEndSlots(newTime));
+        setEndSeats(generateEndSlots());
     };
     
     const handleEndTimeChange = (newTime: string) => {
@@ -73,11 +96,13 @@ export default function TimeSelection() {
         const cleanedEndTime = endTime.replace(/:/g, '');
         params.set("startTime", cleanedStartTime);
         params.set("endTime", cleanedEndTime);
-        router.push(`${pathname}?${params.toString()}`);
+        router.push(`${pathname}?${params.toString()}`, { scroll: false });
     };
     
     // Update URL Params on Mount
     useEffect(() => {
+      if (endTime === undefined) return;
+      if (startTime === undefined) return;
         updateURLParams();
     }, [startTime, endTime]);
     
@@ -86,7 +111,11 @@ export default function TimeSelection() {
       setIsDisabled(searchParams.get("allDayStatus") === "true");
     }, [searchParams]);
 
-    // 
+    useEffect(() => {
+        setStartSeats(timeSlots);
+        setEndSeats(generateEndSlots());
+    }, [timeSlots]);
+
     useEffect(() => {
         if (!isEarlier(startTime, endTime)) setEndTime(endSeats[0]!);
     }, [endSeats]);    

@@ -6,9 +6,9 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { classNames } from "../../utils/classNames";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-const seats = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]; // Removed "0"
+const seats = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-export default function DeskSelection() {
+export default function DeskSelection({ fullDesks }: { fullDesks: number[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams()!;
@@ -17,12 +17,14 @@ export default function DeskSelection() {
   const updateURLParams = () => {
     const params = new URLSearchParams(searchParams);
     params.set("deskid", selected);
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   useEffect(() => {
     updateURLParams();
   }, [selected]);
+
+  const availableSeats = seats.filter(seat => !fullDesks.includes(seat));
 
   return (
     <Listbox value={selected} onChange={(deskID) => setSelected(deskID)}>
@@ -52,7 +54,7 @@ export default function DeskSelection() {
               leaveTo="opacity-0"
             >
               <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-gray-700 py-1 text-base shadow-lg ring-1 ring-gray-500 ring-opacity-5 focus:outline-none sm:text-sm">
-                {seats.map((seat) => (
+                {availableSeats.map((seat) => (
                   <Listbox.Option
                     key={seat}
                     className={({ active }) =>
