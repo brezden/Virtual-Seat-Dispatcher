@@ -60,21 +60,19 @@ export function bookingIsInvalid(bookingData: BookingData[], booking: Booking): 
 
     // Check if the locations are the same
     if (booking.location === existingBooking.location) {
+        console.log(booking, existingBooking)
         if (booking.allDay === true){
             return true;
         }
 
-        if (existingBooking.allDay === true) {
+        if (existingBooking.allDay === true){
             return true;
         }
-      // Check for overlap in dates for all-day or specific time bookings
-        if (newBookingStart.toDateString() === existingStart.toDateString()) {
-          return true; // Overlap found
-        }
-      } else {
+
         if ((newBookingStart < existingEnd) && (newBookingEnd > existingStart)) {
           return true; // Overlap found
         }
+        console.log("no overlap")
     }
   }
 

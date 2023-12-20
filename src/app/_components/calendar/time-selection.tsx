@@ -101,6 +101,8 @@ export default function TimeSelection({ timeSlots }: { timeSlots: string[] }) {
     
     // Update URL Params on Mount
     useEffect(() => {
+      if (endTime === undefined) return;
+      if (startTime === undefined) return;
         updateURLParams();
     }, [startTime, endTime]);
     
