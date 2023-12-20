@@ -14,7 +14,7 @@ export default async function Book({
 
   return (
     <div>
-      <NavigationBar />
+      <NavigationBar currentPath="/book"/>
       <div className="mx-auto px-6 py-6 sm:px-6 lg:px-12">
         <main>
           <div className="flex h-full flex-col justify-center px-12">

@@ -55,17 +55,16 @@ export default function MapViewToggle({ meetings }: MapViewToggleProps) {
                   }`}
                 >
                   {meetings.map((meeting) => (
-                    <li
-                      key={meeting.id}
-                      className="relative flex space-x-6 py-6 xl:static"
-                    >
-                      <Image
-                        src={meeting.imageUrl ?? ""}
-                        alt="User Profile Picture"
-                        className="rounded-full object-cover object-center"
-                        width={100}
-                        height={100}
-                      />
+                    <li key={meeting.id} className="relative flex space-x-6 py-6 xl:static">
+                      <div className="w-28 h-28 flex justify-center items-center"> {/* w-24 and h-24 are Tailwind classes for width and height */}
+                        <Image
+                          src={meeting.imageUrl ?? ""}
+                          alt="User Profile Picture"
+                          className="rounded-full object-cover object-center"
+                          width={112}  // Corresponds to the Tailwind size (24 * 4 = 96)
+                          height={112} // Corresponds to the Tailwind size
+                        />
+                      </div>
                       <div className="flex-auto">
                         <h2 className="text-white-600 pr-10 text-xl font-semibold">
                           {meeting.name}
