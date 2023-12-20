@@ -12,7 +12,11 @@ interface MapViewToggleProps {
 }
 export default function MapViewToggle({ meetings }: MapViewToggleProps) {
   const [enabled, setEnabled] = useState(false);
+  const [is3DView, setIs3DView] = useState(false);
   const isSingleRow = meetings.length == 1;
+  const toggle3DView = () => {
+    setIs3DView(!is3DView);
+  };
   return (
     <div>
       <Switch.Group as="div" className="flex items-center justify-center">
@@ -40,9 +44,37 @@ export default function MapViewToggle({ meetings }: MapViewToggleProps) {
       </Switch.Group>
       <div className="mt-4 text-center">
         {enabled ? (
-          <div className="h-[70vh]">
-            <Map />
-          </div>
+          
+          
+            is3DView ? (
+              <div className="h-[70vh] relative">
+              <Map />
+              <button
+                onClick={toggle3DView}
+                className="absolute top-0 right-0 m-2 p-2 bg-blue-500 text-white rounded"
+
+              >
+                2D
+              </button>
+            </div>
+            ) : (
+              <div className="h-[70vh] relative">
+                <Image
+                  src="/map.png" 
+                  alt="Descriptive alt text"
+                  layout="fill"
+                  objectFit="fit"
+                />
+                <button
+                  onClick={toggle3DView}
+                  className="absolute top-0 right-0 m-2 p-2 bg-blue-500 text-white rounded"
+                >
+                  3D
+                </button>
+              </div>
+            )
+          
+          
         ) : (
           <div>
             {meetings.length > 0 ? (
