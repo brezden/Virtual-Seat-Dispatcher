@@ -50,7 +50,6 @@ function getTimeSlots(startDate?: string, endDate?: string): string[] {
 
 export function bookingIsInvalid(bookingData: BookingData[], booking: Booking): boolean {
   // Convert start date to Date object and determine the end date based on the allDay flag
-  console.log(bookingData)
   const newBookingStart = booking.startDate;
   const newBookingEnd = booking.allDay ? new Date(booking.startDate.setHours(23, 59, 59, 999)) : (booking.endDate ?? new Date(booking.startDate.setHours(23, 59, 59, 999)));
 
@@ -61,11 +60,11 @@ export function bookingIsInvalid(bookingData: BookingData[], booking: Booking): 
 
     // Check if the locations are the same
     if (booking.location === existingBooking.location) {
-        if (booking.allDay){
+        if (booking.allDay === true){
             return true;
         }
 
-        if (existingBooking.allDay) {
+        if (existingBooking.allDay === true) {
             return true;
         }
       // Check for overlap in dates for all-day or specific time bookings
