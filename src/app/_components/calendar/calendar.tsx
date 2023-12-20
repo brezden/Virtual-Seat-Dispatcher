@@ -168,6 +168,7 @@ export default function Calendar() {
                   type="button"
                   href={`?${params.toString()}`}
                   className={dayClasses}
+                  scroll={false}
                 >
                   {timeElement}
                 </Link>

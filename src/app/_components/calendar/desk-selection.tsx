@@ -17,7 +17,7 @@ export default function DeskSelection({ fullDesks }: { fullDesks: number[] }) {
   const updateURLParams = () => {
     const params = new URLSearchParams(searchParams);
     params.set("deskid", selected);
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   useEffect(() => {

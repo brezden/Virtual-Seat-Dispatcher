@@ -96,7 +96,7 @@ export default function TimeSelection({ timeSlots }: { timeSlots: string[] }) {
         const cleanedEndTime = endTime.replace(/:/g, '');
         params.set("startTime", cleanedStartTime);
         params.set("endTime", cleanedEndTime);
-        router.push(`${pathname}?${params.toString()}`);
+        router.push(`${pathname}?${params.toString()}`, { scroll: false });
     };
     
     // Update URL Params on Mount
