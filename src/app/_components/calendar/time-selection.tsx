@@ -117,7 +117,25 @@ export default function TimeSelection({ timeSlots }: { timeSlots: string[] }) {
     }, [timeSlots]);
 
     useEffect(() => {
-        if (!isEarlier(startTime, endTime)) setEndTime(endSeats[0]!);
+        if (!isEarlier(startTime, endTime)){
+          const [hours, minutes] = startTime.split(':').map(Number);
+
+          // Create a date object (the date doesn't matter)
+          const date = new Date();
+          if (hours === undefined || minutes === undefined) return;
+          date.setHours(hours, minutes);
+
+          // Add 15 minutes
+          date.setMinutes(date.getMinutes() + 15);
+
+          // Format the hours and minutes, ensuring two digits
+          const formattedHours = String(date.getHours()).padStart(2, '0');
+          const formattedMinutes = String(date.getMinutes()).padStart(2, '0');
+
+          // Return the formatted time string
+          const finalTime = `${formattedHours}:${formattedMinutes}`;
+          setEndTime(finalTime);
+        } 
     }, [endSeats]);    
 
     return (

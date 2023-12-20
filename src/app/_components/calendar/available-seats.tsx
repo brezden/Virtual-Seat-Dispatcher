@@ -98,7 +98,7 @@ export default function AvailableMembers({ meetings }: BookedMembersProps) {
     }
 
     if (bookingIsInvalid(meetings, bookingData)) {
-      handleBookingError("Invalid booking data. Check you have not booked over an existing booking.");
+      handleBookingError("Invalid booking data. Check you have not booked over an existing booking or booked multiple desks at the same time.");
       return;
     }
 

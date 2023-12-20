@@ -1,5 +1,7 @@
 import type { Day } from "~/app/types/calendar";
 import type { Booking } from "~/app/types/meeting";
+import { format, parseISO } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 
 export function getCurrentDateInEST() {
   const now = new Date();
@@ -225,4 +227,9 @@ export function formatBookingDetails(booking: Booking): string {
       const endTime = booking.endDate.toLocaleTimeString('en-US', timeOptions);
       return `You booked on ${startDate} to ${endTime} at Desk ${booking.location}`;
   }
+}
+
+export function formatDateToString(date: string): string {
+  const zonedDate = utcToZonedTime(date, 'UTC');
+  return format(zonedDate, 'MMMM do yyyy', { timeZone: 'UTC' });
 }

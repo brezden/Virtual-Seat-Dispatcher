@@ -28,4 +28,13 @@ export const meetingRouter = createTRPCRouter({
         },
       });
     }),
+
+    deleteBooking: protectedProcedure
+    .input(z.object({ bookingId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.booking.delete({
+        where: { id: input.bookingId },
+      });
+      return { success: true, message: "Booking deleted successfully" };
+    }),
 });

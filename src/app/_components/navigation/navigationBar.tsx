@@ -2,12 +2,16 @@ import BookProfile from "./navigationProfile";
 import { classNames } from "../../utils/classNames";
 import SignOutButton from "../buttons/sign-out";
 
-const navigation = [
-  { name: "Book", href: "/book", current: true },
-  { name: "Manage Bookings", href: "/manageBookings", current: false },
-];
+interface NavigationBarProps {
+  currentPath: string;
+}
 
-export default function NavigationBar() {
+export default function NavigationBar({ currentPath }: NavigationBarProps) {
+  const navigation = [
+    { name: "Book", href: "/book", current: currentPath === "/book" },
+    { name: "Manage Bookings", href: "/manageBooking", current: currentPath === "/manageBooking" },
+  ];
+
   return (
     <>
       <div className="mx-auto px-6 pt-3 sm:px-6 lg:px-12">
