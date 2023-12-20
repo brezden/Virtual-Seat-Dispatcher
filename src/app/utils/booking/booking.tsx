@@ -53,6 +53,14 @@ export function bookingIsInvalid(bookingData: BookingData[], booking: Booking): 
   const newBookingStart = booking.startDate;
   const newBookingEnd = booking.allDay ? new Date(booking.startDate.setHours(23, 59, 59, 999)) : (booking.endDate ?? new Date(booking.startDate.setHours(23, 59, 59, 999)));
 
+    if (booking.endDate != undefined && booking.startDate.getTime() === booking.endDate.getTime()) {
+        return true;
+    }
+
+    if (booking.endDate != undefined && booking.endDate < booking.startDate) {
+        return true;
+    }
+
   // Iterate through existing bookings to check for overlap
   for (const existingBooking of bookingData) {
     const existingStart = new Date(existingBooking.date);
