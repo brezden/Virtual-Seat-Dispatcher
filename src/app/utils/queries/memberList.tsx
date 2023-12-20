@@ -30,6 +30,7 @@ export async function fetchBookingsOnDate(
     return {
       id: booking.id,
       name: booking.user.name ?? "User",
+      userEmail: booking.user.email ?? "",
       imageUrl: booking.user.picture,
       date: booking.startDate.toISOString(),
       enddate: booking.endDate ? booking.endDate.toISOString() : null,

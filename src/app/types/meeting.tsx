@@ -1,6 +1,7 @@
 export interface BookingData {
   id: number;
   name: string;
+  userEmail: string | null;
   imageUrl: string | null;
   date: string;
   enddate: string | null;

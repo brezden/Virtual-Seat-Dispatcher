@@ -59,7 +59,7 @@ export function bookingIsInvalid(bookingData: BookingData[], booking: Booking): 
     const existingEnd = existingBooking.enddate ? new Date(existingBooking.enddate) : new Date(existingBooking.date).setHours(23, 59, 59, 999);
 
     // Check if the locations are the same
-    if (booking.location === existingBooking.location) {
+    if ((booking.location === existingBooking.location) || (existingBooking.userEmail === booking.userEmail)) {
         if (booking.allDay === true){
             return true;
         }
