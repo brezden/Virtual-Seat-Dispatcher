@@ -231,5 +231,5 @@ export function formatBookingDetails(booking: Booking): string {
 
 export function formatDateToString(date: string): string {
   const zonedDate = utcToZonedTime(date, 'UTC');
-  return format(zonedDate, 'MMMM do yyyy', { timeZone: 'UTC' });
+  return format(zonedDate, 'MMMM do yyyy');
 }
