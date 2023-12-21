@@ -49,38 +49,38 @@ function getTimeSlots(startDate?: string, endDate?: string): string[] {
 }
 
 export function bookingIsInvalid(bookingData: BookingData[], booking: Booking): boolean {
-//   // Convert start date to Date object and determine the end date based on the allDay flag
-//   const newBookingStart = booking.startDate;
-//   const newBookingEnd = booking.allDay ? new Date(booking.startDate.setHours(23, 59, 59, 999)) : (booking.endDate ?? new Date(booking.startDate.setHours(23, 59, 59, 999)));
+  // Convert start date to Date object and determine the end date based on the allDay flag
+  const newBookingStart = booking.startDate;
+  const newBookingEnd = booking.allDay ? new Date(booking.startDate.setHours(23, 59, 59, 999)) : (booking.endDate ?? new Date(booking.startDate.setHours(23, 59, 59, 999)));
 
-//     if (booking.endDate != undefined && booking.startDate.getTime() === booking.endDate.getTime()) {
-//         return true;
-//     }
+    if (booking.endDate != undefined && booking.startDate.getTime() === booking.endDate.getTime()) {
+        return true;
+    }
 
-//     if (booking.endDate != undefined && booking.endDate < booking.startDate) {
-//         return true;
-//     }
+    if (booking.endDate != undefined && booking.endDate < booking.startDate) {
+        return true;
+    }
 
-//   // Iterate through existing bookings to check for overlap
-//   for (const existingBooking of bookingData) {
-//     const existingStart = new Date(existingBooking.date);
-//     const existingEnd = existingBooking.enddate ? new Date(existingBooking.enddate) : new Date(existingBooking.date).setHours(23, 59, 59, 999);
+  // Iterate through existing bookings to check for overlap
+  for (const existingBooking of bookingData) {
+    const existingStart = new Date(existingBooking.date);
+    const existingEnd = existingBooking.enddate ? new Date(existingBooking.enddate) : new Date(existingBooking.date).setHours(23, 59, 59, 999);
 
-//     // Check if the locations are the same
-//     if ((booking.location === existingBooking.location) || (existingBooking.userEmail === booking.userEmail)) {
-//         if (booking.allDay === true){
-//             return true;
-//         }
+    // Check if the locations are the same
+    if ((booking.location === existingBooking.location) || (existingBooking.userEmail === booking.userEmail)) {
+        if (booking.allDay === true){
+            return true;
+        }
 
-//         if (existingBooking.allDay === true){
-//             return true;
-//         }
+        if (existingBooking.allDay === true){
+            return true;
+        }
 
-//         if ((newBookingStart < existingEnd) && (newBookingEnd > existingStart)) {
-//           return true; // Overlap found
-//         }
-//     }
-//   }
+        if ((newBookingStart < existingEnd) && (newBookingEnd > existingStart)) {
+          return true; // Overlap found
+        }
+    }
+  }
 
   return false; // No overlap found
 }
