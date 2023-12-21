@@ -7,6 +7,7 @@ import Image from "next/image";
 import { type BookingData } from "~/app/types/meeting";
 import { Map } from "../map";
 import { formatTimesToEST } from "~/app/utils/calendar/dates";
+import MapView2D from "../map-view";
 interface MapViewToggleProps {
   meetings: BookingData[];
 }
@@ -44,37 +45,41 @@ export default function MapViewToggle({ meetings }: MapViewToggleProps) {
       </Switch.Group>
       <div className="mt-4 text-center">
         {enabled ? (
-          
-          
-            is3DView ? (
-              <div className="h-[70vh] relative">
-              <Map />
-              <button
-                onClick={toggle3DView}
-                className="absolute top-0 right-0 m-2 p-2 bg-blue-500 text-white rounded"
-
-              >
-                2D
-              </button>
-            </div>
-            ) : (
-              <div className="h-[70vh] relative">
-                <Image
-                  src="/map.png" 
-                  alt="Descriptive alt text"
-                  layout="fill"
-                  objectFit="fit"
-                />
-                <button
-                  onClick={toggle3DView}
-                  className="absolute top-0 right-0 m-2 p-2 bg-blue-500 text-white rounded"
-                >
-                  3D
-                </button>
-              </div>
-            )
-          
-          
+          <div className="h-[70vh] relative">
+          {is3DView ? (
+            <>
+            <Map />
+            <button
+              onClick={toggle3DView}
+              className="absolute top-0 right-12 m-2 p-2 bg-gray-500 text-white rounded hover:bg-gray-700 transition duration-300"
+            >
+              2D
+            </button>
+            <button
+              disabled
+              className="absolute top-0 right-0 m-2 p-2 bg-blue-500 text-white rounded opacity-50 cursor-not-allowed"
+            >
+              3D
+            </button>
+          </>
+          ) : (
+          <>
+            <MapView2D />
+            <button
+              disabled
+              className="absolute top-0 right-12 m-2 p-2 bg-blue-500 text-white rounded opacity-50 cursor-not-allowed"
+            >
+              2D
+            </button>
+            <button
+              onClick={toggle3DView}
+              className="absolute top-0 right-0 m-2 p-2 bg-gray-500 text-white rounded hover:bg-gray-700 transition duration-300"
+            >
+              3D
+            </button>
+          </>
+          )}
+        </div>
         ) : (
           <div>
             {meetings.length > 0 ? (
