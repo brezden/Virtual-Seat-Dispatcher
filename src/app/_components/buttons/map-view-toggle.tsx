@@ -64,7 +64,7 @@ export default function MapViewToggle({ meetings }: MapViewToggleProps) {
           </>
           ) : (
           <>
-            <MapView2D />
+            <MapView2D meetings={meetings}/>
             <button
               disabled
               className="absolute top-0 right-12 m-2 p-2 bg-blue-500 text-white rounded opacity-50 cursor-not-allowed"
