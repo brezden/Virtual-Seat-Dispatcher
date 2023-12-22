@@ -11,6 +11,10 @@ export default async function ManageBook() {
   const session = await getServerSession(authOptions);
   const email = session?.user?.email ?? "";
   const meetings = await fetchBookingsForUser(email);
+  meetings.sort((a, b) => {
+    // Convert the dates to timestamps and subtract
+    return new Date(a.date).getTime() - new Date(b.date).getTime();
+  });
 
   return (
     <div>
@@ -20,7 +24,7 @@ export default async function ManageBook() {
           <div className="flex h-full flex-col justify-center px-12">
           <div>
             <h2 className="text-white-900 text-center text-xl font-medium leading-6">
-                Upcoming Bookings
+                Bookings
             </h2>
             {meetings.length > 0 ? (
               <div className="flex h-full w-full items-center justify-center pt-2">
@@ -98,11 +102,6 @@ export default async function ManageBook() {
                 </h3>
               </div>
             )}
-          </div>
-          <div className="pt-6">
-            <h2 className="text-white-900 text-center text-xl font-medium leading-6">
-                Past Bookings
-            </h2>
           </div>
           </div>
         </main>
