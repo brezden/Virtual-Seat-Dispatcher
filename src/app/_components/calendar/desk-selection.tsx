@@ -6,7 +6,7 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { classNames } from "../../utils/classNames";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-const seats = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const seats = [1, 2, 3, 4, 5, 6];
 
 export default function DeskSelection({ fullDesks }: { fullDesks: number[] }) {
   const router = useRouter();

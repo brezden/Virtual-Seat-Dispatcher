@@ -77,6 +77,20 @@ export default function MapViewToggle({ meetings }: MapViewToggleProps) {
             >
               3D
             </button>
+            <div className="absolute top-0 left-0 flex flex-col gap-2 m-2">
+              <div className="flex items-center gap-1">
+                <span className="block w-4 h-4 border-2 border-white rounded-full"></span>
+                <p className="text-sm">Full</p>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="block w-4 h-4 bg-orange-500"></span>
+                <p className="text-sm">Partially Full</p>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="block w-4 h-4 bg-gray-500"></span>
+                <p className="text-sm">Empty</p>
+              </div>
+            </div>
           </>
           )}
         </div>
