@@ -2,6 +2,8 @@
 
 Welcome to the Virtual Seat Dispatcher, an intuitive seat picker app designed to streamline the process of booking seats in an office environment. Leveraging the T3 Stack, this app offers a user-friendly interface and efficient seat allocation functionality.
 
+![VSDScreenshot](https://github.com/brezden/Virtual-Seat-Dispatcher/assets/60556017/5cd91ff5-d9d1-430e-8452-24310b648181)
+
 ## Features
 
 - **Interactive Seat Selection:** Choose your preferred seat from a visual office layout.
